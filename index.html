@@ -426,15 +426,19 @@
       font-family: var(--display);
       font-weight: 400;
       text-transform: uppercase;
-      font-size: clamp(2.4rem, 5vw, 4rem);
-      line-height: 1.1;
+      font-size: clamp(1.9rem, 4.5vw, 4rem);
+      line-height: 0.92;
       letter-spacing: -0.01em;
       color: var(--ink);
-      max-width: 100%;
+      max-width: 14ch;
       margin-bottom: 40px;
     }
     .manifesto-quote .red { color: var(--accent); }
-    .manifesto-quote em { font-style: normal; }
+    .manifesto-quote em {
+      font-style: normal;
+      -webkit-text-stroke: 1px var(--ink);
+      color: transparent;
+    }
 
     .manifesto-principles {
       display: grid;
@@ -1352,8 +1356,8 @@
     .valores-head h2 {
       font-family: var(--display); font-weight: 400;
       text-transform: uppercase;
-      font-size: clamp(2.4rem, 5vw, 4rem);
-      line-height: 1.1; letter-spacing: -0.005em; margin-top: 18px;
+      font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+      line-height: 0.95; letter-spacing: -0.005em; margin-top: 18px;
     }
     .valores-head h2 .red { color: var(--accent); }
     .valores-grid {
@@ -1384,8 +1388,8 @@
     .gallery-head h2 {
       font-family: var(--display); font-weight: 400;
       text-transform: uppercase;
-      font-size: clamp(0.85rem, 1.2vw, 1rem);
-      line-height: 1.5; letter-spacing: -0.005em; margin-top: 18px;
+      font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+      line-height: 0.95; letter-spacing: -0.005em; margin-top: 18px;
     }
     .gallery-head h2 .red { color: var(--accent); }
     .gallery-grid {
@@ -1440,8 +1444,8 @@
     .testimonios-head h2 {
       font-family: var(--display); font-weight: 400;
       text-transform: uppercase;
-      font-size: clamp(0.85rem, 1.2vw, 1rem);
-      line-height: 1.5; letter-spacing: -0.005em; margin-top: 18px;
+      font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+      line-height: 0.95; letter-spacing: -0.005em; margin-top: 18px;
     }
     .testimonios-head h2 .red { color: var(--accent); }
     .testimonios-grid {
@@ -1751,7 +1755,12 @@
 
 
     <div class="manifesto-hero reveal">
-      <h2 class="manifesto-quote">El gimnasio que no se vende como <span class="red">tal.</span></h2>
+      <h2 class="manifesto-quote">
+        El gimnasio<br>
+        que no se<br>
+        vende <em>como</em><br>
+        <span class="red">tal.</span>
+      </h2>
       <div class="eyebrow">Un gimnasio honesto · Sin atajos · Sin postureo</div>
     </div>
 
