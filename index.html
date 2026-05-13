@@ -6,6 +6,9 @@
   <title>Quality Life Gym · Desde 2012 · Musculación & CrossFit</title>
   <meta name="description" content="Cuarenta años forjando hierro y carácter. Sala de musculación clásica y nuevo box de CrossFit. Sin atajos, sin contratos eternos.">
 
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -384,35 +387,103 @@
     }
 
     /* ================ MANIFIESTO ================ */
-    .manifesto { background: var(--bg); }
-    .manifesto-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.4fr;
-      gap: 80px;
-      align-items: start;
+    .manifesto { background: var(--bg); overflow: hidden; }
+
+    .manifesto-banner {
+      background: var(--accent);
+      padding: 22px var(--gutter);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 0;
     }
-    @media (max-width: 880px) {
-      .manifesto-grid { grid-template-columns: 1fr; gap: 40px; }
+    .manifesto-banner-text {
+      font-family: var(--display);
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink);
+      font-weight: 400;
     }
-    .manifesto-left .eyebrow { margin-bottom: 28px; }
-    .manifesto-title {
+    .manifesto-banner-year {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      color: rgba(237,232,224,0.6);
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .manifesto-hero {
+      padding: clamp(56px, 10vh, 100px) var(--gutter);
+      max-width: var(--max);
+      margin: 0 auto;
+      border-bottom: 1px solid var(--line);
+    }
+    .manifesto-quote {
       font-family: var(--display);
       font-weight: 400;
       text-transform: uppercase;
-      font-size: clamp(2.2rem, 4.5vw, 3.8rem);
-      line-height: 0.95;
-      letter-spacing: -0.005em;
+      font-size: clamp(2.6rem, 7vw, 6.5rem);
+      line-height: 0.92;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      max-width: 14ch;
+      margin-bottom: 40px;
     }
-    .manifesto-body p {
-      font-size: 1.08rem;
+    .manifesto-quote .red { color: var(--accent); }
+    .manifesto-quote em {
+      font-style: normal;
+      -webkit-text-stroke: 1px var(--ink);
+      color: transparent;
+    }
+
+    .manifesto-principles {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--line);
+    }
+    @media (max-width: 720px) {
+      .manifesto-principles { grid-template-columns: 1fr; }
+    }
+    .manifesto-principle {
+      padding: 40px 32px;
+      border-right: 1px solid var(--line);
+      position: relative;
+    }
+    .manifesto-principle:last-child { border-right: none; }
+    @media (max-width: 720px) {
+      .manifesto-principle { border-right: none; border-bottom: 1px solid var(--line); }
+      .manifesto-principle:last-child { border-bottom: none; }
+    }
+    .manifesto-principle-num {
+      font-family: var(--display);
+      font-size: clamp(4rem, 8vw, 7rem);
+      line-height: 0.85;
+      color: var(--line-strong);
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+      font-weight: 400;
+    }
+    .manifesto-principle-title {
+      font-family: var(--display);
+      font-size: 1.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 12px;
+      line-height: 0.95;
+    }
+    .manifesto-principle-title .red { color: var(--accent); }
+    .manifesto-principle-text {
+      font-size: 0.9rem;
       color: var(--ink-soft);
-      margin-bottom: 24px;
-      max-width: 580px;
       line-height: 1.6;
     }
-    .manifesto-body p:last-child { margin-bottom: 0; }
-    .manifesto-body strong { color: var(--ink); font-weight: 600; }
-    .manifesto-body .accent { color: var(--accent); font-weight: 600; }
+    .manifesto-principle-text strong { color: var(--ink); font-weight: 600; }
 
     /* ================ SPACE SECTIONS ================ */
     .space {
@@ -1680,26 +1751,47 @@
   </section>
 
   <!-- ================= MANIFIESTO ================= -->
-  <section class="section manifesto" id="manifiesto">
-    <div class="wrap">
-      <div class="manifesto-grid">
-        <div class="manifesto-left reveal">
-          <div class="eyebrow">01 / Manifiesto</div>
-          <h2 class="manifesto-title">El gimnasio<br>que no se vende<br>como tal.</h2>
-        </div>
-        <div class="manifesto-body reveal">
-          <p>
-            Quality Life abrió en 2012 con una idea sencilla y un poco antigua: un gimnasio se mide por quienes vuelven, no por quienes pasan. Más de una década después, seguimos creyendo lo mismo.
-          </p>
-          <p>
-            No vendemos transformaciones de doce semanas. Tenemos hierro, espejos honestos, técnica revisada y una sala que conoce a sus socios por el nombre.
-          </p>
-          <p>
-            En 2026 abrimos algo nuevo: un box de CrossFit dimensionado para entrenar en serio. <span class="accent">Misma raza. Misma exigencia.</span> Otra forma de mover el cuerpo.
-          </p>
-        </div>
+  <section class="manifesto" id="manifiesto">
+
+    <div class="manifesto-banner reveal">
+      <span class="manifesto-banner-text">01 / Manifiesto · Quality Life Gym</span>
+      <span class="manifesto-banner-year">Est. 2012 · Ciempozuelos, Madrid</span>
+    </div>
+
+    <div class="manifesto-hero reveal">
+      <h2 class="manifesto-quote">
+        El gimnasio<br>
+        que no se<br>
+        vende <em>como</em><br>
+        <span class="red">tal.</span>
+      </h2>
+      <div class="eyebrow">Un gimnasio honesto · Sin atajos · Sin postureo</div>
+    </div>
+
+    <div class="manifesto-principles">
+      <div class="manifesto-principle reveal">
+        <div class="manifesto-principle-num">01</div>
+        <div class="manifesto-principle-title">Los que <span class="red">vuelven.</span></div>
+        <p class="manifesto-principle-text">
+          Quality Life abrió en 2012 con una idea sencilla: <strong>un gimnasio se mide por quienes vuelven, no por quienes pasan.</strong> Más de una década después, seguimos creyendo lo mismo.
+        </p>
+      </div>
+      <div class="manifesto-principle reveal">
+        <div class="manifesto-principle-num">02</div>
+        <div class="manifesto-principle-title">Sin <span class="red">atajos.</span></div>
+        <p class="manifesto-principle-text">
+          No vendemos transformaciones de doce semanas. Tenemos hierro, espejos honestos, técnica revisada y <strong>una sala que conoce a sus socios por el nombre.</strong>
+        </p>
+      </div>
+      <div class="manifesto-principle reveal">
+        <div class="manifesto-principle-num">03</div>
+        <div class="manifesto-principle-title">Misma <span class="red">raza.</span></div>
+        <p class="manifesto-principle-text">
+          En 2026 abrimos el box de CrossFit. Misma exigencia, otra forma de mover el cuerpo. <strong>Dos salas. Un carácter.</strong>
+        </p>
       </div>
     </div>
+
   </section>
 
   <!-- ================= VALORES ================= -->
@@ -1811,7 +1903,7 @@
           <span class="space-tag new">Nuevo · 2026</span>
           <h2 class="space-title">Box de<br><span class="red">CrossFit</span>.</h2>
           <p class="space-desc">
-            Un box compacto y bien pertrechado: rig, barras y bumpers olímpicos, kettlebells, ergs y zona de halterofilia. Tres sesiones al día con Lázaro al frente. Comunidad pequeña, intensidad alta, técnica primero.
+            Un box compacto y bien pertrechado: rig, barras y bumpers olímpicos, zona de halterofilia y gimnasia. Tres sesiones al día con Lázaro al frente. Comunidad pequeña, intensidad alta, técnica primero.
           </p>
           <div class="specs">
             <div>
@@ -1831,8 +1923,6 @@
             <span>WOD</span>
             <span>Halterofilia</span>
             <span>Gimnasia</span>
-            <span>Kettlebells</span>
-            <span>Ergs</span>
             <span>Comunidad</span>
           </div>
         </div>
@@ -1895,16 +1985,6 @@
           <div class="gallery-card-body">
             <div class="gallery-card-tag">Halterofilia</div>
             <div class="gallery-card-name">Bumpers &amp; plataformas</div>
-          </div>
-          <div class="gallery-card-bar"></div>
-        </div>
-
-        <div class="gallery-card reveal">
-          <div class="gallery-card-bg"><svg viewBox="0 0 80 80" fill="none"><path d="M40 15 L55 40 L40 65 L25 40 Z" stroke="#c9222a" stroke-width="2" fill="none"/><circle cx="40" cy="40" r="6" stroke="#c9222a" stroke-width="2"/></svg></div>
-          <div class="gallery-card-corner">Box 01</div>
-          <div class="gallery-card-body">
-            <div class="gallery-card-tag">Funcional</div>
-            <div class="gallery-card-name">Kettlebells &amp; ergs</div>
           </div>
           <div class="gallery-card-bar"></div>
         </div>
@@ -2343,7 +2423,20 @@
       document.addEventListener('keydown', e => { if (e.key === 'Escape' && menuOpen) toggleMenu(false); });
     }
 
-    // Contact form
+    // Contact form — EmailJS
+    // Para activar: sustituye los tres valores de abajo con los de tu cuenta EmailJS
+    //   1. emailjs.init("TU_PUBLIC_KEY")
+    //   2. service_id: "TU_SERVICE_ID"
+    //   3. template_id: "TU_TEMPLATE_ID"
+    // Guía: https://www.emailjs.com/docs/sdk/send-form/
+    const EMAILJS_PUBLIC_KEY  = "PENDIENTE";  // ← tu Public Key de EmailJS
+    const EMAILJS_SERVICE_ID  = "PENDIENTE";  // ← tu Service ID
+    const EMAILJS_TEMPLATE_ID = "PENDIENTE";  // ← tu Template ID
+
+    if (typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY !== "PENDIENTE") {
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+    }
+
     const form = document.getElementById('contact-form');
     const formSuccess = document.getElementById('form-success');
     if (form) {
@@ -2351,11 +2444,30 @@
         e.preventDefault();
         const btn = form.querySelector('[type=submit]');
         btn.textContent = 'Enviando…'; btn.disabled = true; btn.style.opacity = '0.7';
-        setTimeout(() => {
-          btn.style.display = 'none';
-          if (formSuccess) formSuccess.style.display = 'block';
-          form.reset();
-        }, 1200);
+
+        const sendEmail = () => {
+          if (typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY !== "PENDIENTE") {
+            emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, form)
+              .then(() => {
+                btn.style.display = 'none';
+                if (formSuccess) formSuccess.style.display = 'block';
+                form.reset();
+              })
+              .catch(err => {
+                console.error('EmailJS error:', err);
+                btn.textContent = 'Error al enviar — llámanos';
+                btn.disabled = false; btn.style.opacity = '1';
+              });
+          } else {
+            // Sin EmailJS configurado: simula éxito (modo demo)
+            setTimeout(() => {
+              btn.style.display = 'none';
+              if (formSuccess) formSuccess.style.display = 'block';
+              form.reset();
+            }, 1000);
+          }
+        };
+        sendEmail();
       });
     }
 
