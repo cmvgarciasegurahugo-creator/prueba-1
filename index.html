@@ -11,20 +11,20 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Oswald:wght@400;500;600&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #0a0a0a;
-      --bg-2: #131211;
-      --bg-3: #1a1817;
+      --bg: #050403;
+      --bg-2: #0d0c0a;
+      --bg-3: #15130f;
       --ink: #ede8e0;
       --ink-soft: #9a9590;
       --ink-mute: #5a5550;
       --accent: #c9222a;
       --accent-2: #e63946;
-      --line: rgba(237, 232, 224, 0.10);
-      --line-strong: rgba(237, 232, 224, 0.22);
+      --line: rgba(237, 232, 224, 0.12);
+      --line-strong: rgba(237, 232, 224, 0.24);
 
       --display: 'Anton', 'Helvetica Neue', sans-serif;
       --body: 'Manrope', system-ui, sans-serif;
@@ -32,7 +32,26 @@
 
       --max: 1320px;
       --gutter: clamp(20px, 4vw, 56px);
+      --section-pad-y: clamp(80px, 12vh, 140px);
+      --grain-opacity: 0.035;
     }
+
+    /* ============ TWEAK: ACCENT PALETTES ============ */
+    html[data-accent="copper"]  { --accent: #b56a2c; --accent-2: #d68a4d; }
+    html[data-accent="amber"]   { --accent: #d4a843; --accent-2: #e8c060; }
+    html[data-accent="olive"]   { --accent: #7a8a44; --accent-2: #97a85a; }
+    html[data-accent="indigo"]  { --accent: #5468d4; --accent-2: #6f82e6; }
+
+    /* ============ TWEAK: DENSITY ============ */
+    html[data-density="compact"] { --section-pad-y: clamp(48px, 7vh, 80px); }
+
+    /* ============ TWEAK: DISPLAY FONT ============ */
+    html[data-display="bebas"]  { --display: 'Bebas Neue', 'Anton', sans-serif; }
+    html[data-display="oswald"] { --display: 'Oswald', 'Anton', sans-serif; }
+
+    /* ============ TWEAK: GRAIN ============ */
+    html[data-grain="visible"] { --grain-opacity: 0.07; }
+    html[data-grain="none"]    { --grain-opacity: 0; }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -58,13 +77,14 @@
       inset: 0;
       pointer-events: none;
       z-index: 200;
-      opacity: 0.035;
+      opacity: var(--grain-opacity);
       background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='220' height='220' filter='url(%23n)' opacity='0.9'/></svg>");
       mix-blend-mode: overlay;
+      transition: opacity 0.4s;
     }
 
     .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
-    .section { padding: clamp(80px, 12vh, 140px) 0; position: relative; }
+    .section { padding: var(--section-pad-y) 0; position: relative; }
 
     .display {
       font-family: var(--display);
@@ -281,9 +301,12 @@
     .hero-logo-wrap {
       position: relative;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
     }
+    .hero-logo-wrap > .hero-portrait { width: 100%; }
+    .hero-logo-wrap > .hero-portrait-bottom { width: 100%; max-width: 480px; }
     .hero-logo-frame {
       position: relative;
       width: 100%;
@@ -487,7 +510,7 @@
 
     /* ================ SPACE SECTIONS ================ */
     .space {
-      padding: clamp(80px, 14vh, 160px) 0;
+      padding: var(--section-pad-y) 0;
       position: relative;
       border-top: 1px solid var(--line);
     }
@@ -1014,7 +1037,7 @@
 
     /* ================ CTA STRIP ================ */
     .cta-strip {
-      padding: clamp(80px, 14vh, 160px) 0;
+      padding: var(--section-pad-y) 0;
       background:
         radial-gradient(ellipse 80% 80% at 50% 50%, rgba(201,34,42,0.09), transparent 65%),
         var(--bg);
@@ -1356,7 +1379,7 @@
     .valores-head h2 {
       font-family: var(--display); font-weight: 400;
       text-transform: uppercase;
-      font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+      font-size: clamp(2.4rem, 5vw, 4rem);
       line-height: 0.95; letter-spacing: -0.005em; margin-top: 18px;
     }
     .valores-head h2 .red { color: var(--accent); }
@@ -1388,7 +1411,7 @@
     .gallery-head h2 {
       font-family: var(--display); font-weight: 400;
       text-transform: uppercase;
-      font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+      font-size: clamp(2.4rem, 5vw, 4rem);
       line-height: 0.95; letter-spacing: -0.005em; margin-top: 18px;
     }
     .gallery-head h2 .red { color: var(--accent); }
@@ -1537,6 +1560,367 @@
       letter-spacing: 0.1em; color: var(--ink); text-transform: uppercase;
     }
 
+    /* ================ ACCESS CARD (replaces map iframe) ================ */
+    .access-card {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      position: relative;
+    }
+    .access-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--line);
+    }
+    .access-card-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.18em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .access-card-eyebrow::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent);
+    }
+    .access-card-title {
+      font-family: var(--display);
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-weight: 400;
+      line-height: 1;
+    }
+    .access-card-stamp {
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.16em;
+      color: var(--ink-mute);
+      text-transform: uppercase;
+      text-align: right;
+      line-height: 1.5;
+      flex-shrink: 0;
+    }
+    .access-card-stamp .accent { color: var(--accent); }
+    .access-coords {
+      font-family: var(--display);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      line-height: 1;
+      letter-spacing: -0.005em;
+      color: var(--ink);
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .access-coords .lbl {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      color: var(--ink-mute);
+      text-transform: uppercase;
+    }
+    .access-coords .sep { color: var(--accent); }
+
+    .access-schematic {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      background-color: var(--bg-2);
+      background-image:
+        linear-gradient(135deg,
+          rgba(237,232,224,0.04) 0,
+          rgba(237,232,224,0.04) 1px,
+          transparent 1px,
+          transparent 9px);
+      border: 1px solid var(--line);
+      overflow: hidden;
+    }
+    .access-schematic svg { width: 100%; height: 100%; display: block; }
+    .access-schematic-corner {
+      position: absolute;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.16em;
+      color: var(--ink-mute);
+      text-transform: uppercase;
+      z-index: 2;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .access-schematic-corner.tl { top: 14px; left: 16px; color: var(--accent); }
+    .access-schematic-corner.tr { top: 14px; right: 16px; }
+    .access-schematic-corner.bl { bottom: 14px; left: 16px; }
+    .access-schematic-corner.br { bottom: 14px; right: 16px; color: var(--accent); }
+
+    .access-modes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    @media (max-width: 540px) {
+      .access-modes { grid-template-columns: 1fr; }
+    }
+    .access-mode {
+      padding: 18px 18px;
+      border-right: 1px solid var(--line);
+    }
+    .access-mode:last-child { border-right: none; }
+    @media (max-width: 540px) {
+      .access-mode { border-right: none; border-bottom: 1px solid var(--line); }
+      .access-mode:last-child { border-bottom: none; }
+    }
+    .access-mode-label {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.16em;
+      color: var(--ink-mute);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .access-mode-time {
+      font-family: var(--display);
+      font-size: 1.8rem;
+      line-height: 1;
+      letter-spacing: -0.005em;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .access-mode-time .unit {
+      font-family: var(--mono);
+      font-size: 0.6em;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      margin-left: 3px;
+    }
+    .access-mode-detail {
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+      line-height: 1.45;
+    }
+
+    .access-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .access-btn {
+      flex: 1;
+      min-width: 200px;
+      padding: 14px 18px;
+      font-family: var(--body);
+      font-weight: 600;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .access-btn.primary {
+      background: var(--accent);
+      color: var(--ink);
+    }
+    .access-btn.primary:hover { background: var(--accent-2); }
+    .access-btn.primary .arrow { transition: transform 0.25s; }
+    .access-btn.primary:hover .arrow { transform: translateX(4px); }
+    .access-btn.ghost {
+      background: transparent;
+      border: 1px solid var(--line-strong);
+      color: var(--ink);
+    }
+    .access-btn.ghost:hover {
+      border-color: var(--ink);
+      background: rgba(237,232,224,0.04);
+    }
+
+    /* ================ TWEAKS PANEL ================ */
+    .tweaks-panel {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 250;
+      width: 320px;
+      max-width: calc(100vw - 32px);
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;
+      background: rgba(13,12,10,0.96);
+      border: 1px solid var(--line-strong);
+      backdrop-filter: blur(14px) saturate(140%);
+      -webkit-backdrop-filter: blur(14px) saturate(140%);
+      color: var(--ink);
+      font-family: var(--body);
+      transform: translateY(20px) scale(0.96);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .tweaks-panel.open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    .tweaks-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    .tweaks-title {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      color: var(--ink);
+      text-transform: uppercase;
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .tweaks-title::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent);
+      transform: rotate(45deg);
+    }
+    .tweaks-close {
+      width: 24px; height: 24px;
+      display: inline-flex; align-items: center; justify-content: center;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .tweaks-close:hover { color: var(--ink); }
+    .tweaks-close::before {
+      content: '×';
+      font-family: var(--display);
+      font-size: 1.3rem;
+      line-height: 1;
+    }
+    .tweaks-body {
+      padding: 16px 18px 20px;
+      display: flex; flex-direction: column; gap: 22px;
+    }
+    .tweak-section-title {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      color: var(--ink-mute);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .tweak-section-title .val { color: var(--accent); }
+    .tweak-swatches {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+    .tweak-swatch {
+      aspect-ratio: 1 / 1;
+      border: 1px solid var(--line);
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .tweak-swatch:hover { transform: translateY(-2px); border-color: var(--line-strong); }
+    .tweak-swatch.active { border-color: var(--ink); }
+    .tweak-swatch.active::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+    .tweak-seg {
+      display: grid;
+      gap: 0;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+      border: 1px solid var(--line);
+    }
+    .tweak-seg button {
+      padding: 9px 10px;
+      background: transparent;
+      color: var(--ink-soft);
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      border-right: 1px solid var(--line);
+      transition: background 0.15s, color 0.15s;
+    }
+    .tweak-seg button:last-child { border-right: none; }
+    .tweak-seg button:hover { color: var(--ink); background: rgba(237,232,224,0.04); }
+    .tweak-seg button.active {
+      background: var(--accent);
+      color: var(--ink);
+    }
+
+    .tweaks-toggle {
+      position: fixed;
+      right: 24px; bottom: 96px;
+      z-index: 150;
+      padding: 11px 16px;
+      background: var(--bg);
+      border: 1px solid var(--line-strong);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+    .tweaks-toggle:hover {
+      border-color: var(--accent);
+      background: var(--bg-2);
+    }
+    .tweaks-toggle::before {
+      content: '';
+      width: 7px; height: 7px;
+      background: var(--accent);
+      transform: rotate(45deg);
+    }
+    .tweaks-toggle.hidden { opacity: 0; pointer-events: none; transform: scale(0.8); }
+
+    .tweaks-meta {
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      color: var(--ink-mute);
+      text-transform: uppercase;
+      line-height: 1.6;
+    }
+    .tweaks-meta .accent { color: var(--accent); }
+
+    @media (max-width: 600px) {
+      .tweaks-panel { right: 12px; bottom: 12px; width: calc(100vw - 24px); }
+      .tweaks-toggle { right: 12px; bottom: 80px; }
+    }
+
     /* ================ WHATSAPP FLOAT ================ */
     .whatsapp-float {
       position: fixed; bottom: 28px; right: 28px; z-index: 150;
@@ -1574,6 +1958,313 @@
       opacity: 1 !important;
       transform: none !important;
     }
+
+    /* ================ PHOTO PLACEHOLDER SYSTEM ================ */
+    /* Diagonal-stripe placeholder used everywhere a real photograph goes.
+       Caption is monospace and explains exactly what shot is needed. */
+    .photo {
+      position: relative;
+      overflow: hidden;
+      background-color: #18171520;
+      background-image:
+        linear-gradient(135deg,
+          rgba(237,232,224,0.045) 0,
+          rgba(237,232,224,0.045) 1px,
+          transparent 1px,
+          transparent 9px),
+        linear-gradient(180deg,
+          rgba(201,34,42,0.05),
+          transparent 55%),
+        linear-gradient(180deg, #181715, #100f0e);
+      border: 1px solid var(--line);
+    }
+    .photo::after {
+      content: '';
+      position: absolute; inset: 14px;
+      border: 1px solid rgba(237,232,224,0.06);
+      pointer-events: none;
+    }
+    .photo-corners::before,
+    .photo-corners::after {
+      content: '';
+      position: absolute;
+      width: 18px; height: 18px;
+      border: 1px solid var(--accent);
+      pointer-events: none; z-index: 2;
+    }
+    .photo-corners::before { top: 6px; left: 6px; border-right: 0; border-bottom: 0; }
+    .photo-corners::after  { bottom: 6px; right: 6px; border-left: 0; border-top: 0; }
+
+    .photo-caption {
+      position: absolute;
+      left: 28px; right: 28px; bottom: 26px;
+      display: flex; justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px; z-index: 3;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      color: rgba(237,232,224,0.55);
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+    .photo-caption .l { color: var(--ink); }
+    .photo-caption .r { color: var(--accent); }
+
+    .photo-stamp {
+      position: absolute;
+      top: 26px; left: 28px;
+      z-index: 3;
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.18em;
+      color: var(--accent);
+      text-transform: uppercase;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .photo-stamp::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent);
+    }
+    .photo-stamp-r {
+      position: absolute;
+      top: 26px; right: 28px; z-index: 3;
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.18em;
+      color: var(--ink-mute);
+      text-transform: uppercase;
+    }
+    .photo-watermark {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--display);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      color: rgba(237,232,224,0.05);
+      -webkit-text-stroke: 1px rgba(237,232,224,0.12);
+      pointer-events: none; z-index: 1;
+      white-space: nowrap;
+      line-height: 0.85;
+      text-align: center;
+    }
+    .photo-tag-row {
+      position: absolute;
+      left: 28px; right: 28px;
+      bottom: 72px; z-index: 3;
+      display: flex; flex-wrap: wrap; gap: 6px;
+    }
+    @media (max-width: 1100px) {
+      .photo-tag-row { display: none; }
+    }
+    .photo-tag-row span {
+      padding: 4px 9px;
+      background: rgba(10,10,10,0.65);
+      border: 1px solid rgba(237,232,224,0.12);
+      backdrop-filter: blur(4px);
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      color: rgba(237,232,224,0.78);
+      text-transform: uppercase;
+    }
+
+    /* ================ HERO PORTRAIT (replaces logo box) ================ */
+    .hero-portrait {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      aspect-ratio: 4/5;
+    }
+    .hero-portrait .photo-watermark {
+      font-size: clamp(5rem, 11vw, 9rem);
+    }
+    .hero-portrait-frame-label {
+      position: absolute;
+      top: -10px; left: 28px;
+      z-index: 4;
+      background: var(--bg);
+      padding: 0 12px;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      color: var(--ink-mute);
+      text-transform: uppercase;
+    }
+    .hero-portrait-bottom {
+      margin-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.16em;
+      color: var(--ink-mute);
+      text-transform: uppercase;
+    }
+    .hero-portrait-bottom .accent { color: var(--accent); }
+
+    /* ================ SECTION WORDMARK BANNER ================ */
+    .wordmark-banner {
+      background: var(--bg);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: clamp(28px, 5vw, 48px) 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .wordmark-banner-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+      position: relative;
+    }
+    .wordmark-line {
+      font-family: var(--display);
+      font-weight: 400;
+      text-transform: uppercase;
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 0.95;
+      letter-spacing: -0.005em;
+      color: var(--ink);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .wordmark-line .outline {
+      -webkit-text-stroke: 1px var(--ink-soft);
+      color: transparent;
+    }
+    .wordmark-line .red { color: var(--accent); }
+    .wordmark-line .slash { color: var(--accent); font-size: 0.7em; opacity: 0.7; }
+    .wordmark-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      color: var(--ink-mute);
+      text-transform: uppercase;
+      flex-wrap: wrap;
+    }
+    .wordmark-meta span:nth-child(2) { color: var(--ink-soft); }
+    .wordmark-meta .file { color: var(--accent); }
+
+    /* ================ COACH PORTRAIT REFINEMENT ================ */
+    .coach-img.photo {
+      align-items: stretch;
+      padding: 0;
+    }
+    .coach-img.photo .photo-watermark {
+      font-size: clamp(6rem, 11vw, 9rem);
+    }
+    .coach-img.photo .coach-num {
+      top: 26px; right: 28px;
+      color: var(--ink-mute);
+    }
+    .coach-img.photo .coach-tag {
+      position: absolute;
+      top: 26px; left: 28px;
+      z-index: 3;
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.18em;
+      color: var(--accent);
+      text-transform: uppercase;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .coach-img.photo .coach-tag::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent);
+    }
+    .coach-img.photo .coach-caption {
+      position: absolute;
+      bottom: 26px; left: 28px; right: 28px;
+      z-index: 3;
+      display: flex; justify-content: space-between;
+      align-items: flex-end; gap: 16px;
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.14em;
+      color: rgba(237,232,224,0.55);
+      text-transform: uppercase;
+    }
+    .coach-img.photo .coach-caption .l { color: var(--ink); }
+
+    /* ================ GALLERY REFINEMENT ================ */
+    .gallery-card.photo {
+      padding: 0;
+      align-items: stretch;
+    }
+    .gallery-card.photo .photo-watermark {
+      font-size: clamp(3.4rem, 6vw, 5.5rem);
+    }
+    .gallery-card.photo .gallery-card-body {
+      position: absolute;
+      left: 24px; right: 24px; bottom: 24px;
+      z-index: 3;
+    }
+    .gallery-card.photo .gallery-card-corner { z-index: 3; }
+    .gallery-card.photo:first-child .photo-watermark {
+      font-size: clamp(5rem, 9vw, 8rem);
+    }
+
+    /* ================ HERO REFINEMENTS ================ */
+    .hero-side-rail {
+      position: absolute;
+      top: 130px; bottom: 60px;
+      left: var(--gutter);
+      width: 1px;
+      background: var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 5;
+    }
+    .hero-side-rail span {
+      position: relative;
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.18em;
+      color: var(--ink-mute);
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      padding: 4px 6px;
+      background: var(--bg);
+      margin-left: -7px;
+    }
+    .hero-side-rail span.accent { color: var(--accent); }
+    @media (max-width: 1100px) { .hero-side-rail { display: none; } }
+
+    /* Hero ledger row above title */
+    .hero-ledger {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 18px;
+      align-items: center;
+      padding-bottom: 22px;
+      margin-bottom: 36px;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      color: var(--ink-mute);
+      text-transform: uppercase;
+    }
+    .hero-ledger .dash { height: 1px; background: var(--line-strong); }
+    .hero-ledger .l { color: var(--ink-soft); }
+    .hero-ledger .accent { color: var(--accent); }
 
     /* ── Mobile improvements ── */
     @media (max-width: 600px) {
@@ -1667,7 +2358,12 @@
     <div class="wrap">
       <div class="hero-grid">
         <div class="hero-left">
-          <div class="eyebrow hero-eyebrow">EST. 2012 · Escuela de hierro</div>
+          <div class="hero-ledger">
+            <span class="l">Quality Life Gym</span>
+            <span class="dash"></span>
+            <span class="accent">Nº 01 · 2012—2026</span>
+          </div>
+          <div class="eyebrow hero-eyebrow">Escuela de hierro · Musculación &amp; CrossFit</div>
           <h1 class="hero-title">Quality Life<span class="dot">.</span></h1>
           <p class="hero-sub">
             Más de una década entrenando a quienes <strong>no buscan atajos</strong>. Sala de musculación clásica, atendida por Goyo desde el día uno. Desde 2026, también con box de CrossFit dirigido por Lázaro.
@@ -1678,13 +2374,24 @@
           </div>
         </div>
         <div class="hero-logo-wrap">
-          <div class="hero-logo-frame">
-            <span class="hero-logo-label">EST. 2012</span>
-            <img class="hero-logo-img" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480' viewBox='0 0 480 480'%3E%3Crect width='480' height='480' fill='%230a0a0a'/%3E%3Crect x='1' y='1' width='478' height='478' fill='none' stroke='%23c9222a' stroke-width='1'/%3E%3Crect x='20' y='20' width='440' height='440' fill='none' stroke='%23ffffff' stroke-width='0.3' opacity='0.15'/%3E%3Ctext x='240' y='185' text-anchor='middle' font-family='Anton,sans-serif' font-size='52' fill='%23ede8e0' letter-spacing='4'%3EQUALITY%3C/text%3E%3Ctext x='240' y='248' text-anchor='middle' font-family='Anton,sans-serif' font-size='52' fill='%23ede8e0' letter-spacing='4'%3ELIFE%3C/text%3E%3Ctext x='240' y='310' text-anchor='middle' font-family='Anton,sans-serif' font-size='52' fill='%23c9222a' letter-spacing='4'%3EGYM%3C/text%3E%3Cline x1='80' y1='338' x2='400' y2='338' stroke='%23c9222a' stroke-width='1'/%3E%3Ctext x='240' y='365' text-anchor='middle' font-family='monospace' font-size='13' fill='%235a5550' letter-spacing='6'%3EEST. 2012%3C/text%3E%3C/svg%3E" alt="Quality Life Gym — escudo">
-            <div class="hero-logo-bottom">
-              <span>Establecimiento Nº 01</span>
-              <span>Forjado en hierro</span>
+          <div class="hero-portrait photo photo-corners">
+            <span class="hero-portrait-frame-label">Imagen principal · F-01</span>
+            <span class="photo-stamp">Sala 01 · 2012</span>
+            <span class="photo-stamp-r">35mm · B/N</span>
+            <div class="photo-watermark">QL<br>GYM</div>
+            <div class="photo-tag-row">
+              <span>Atleta</span>
+              <span>Barra olímpica</span>
+              <span>Sala principal</span>
             </div>
+            <div class="photo-caption">
+              <span class="l">Foto: socio entrenando · sala de musculación</span>
+              <span class="r">Reemplazar</span>
+            </div>
+          </div>
+          <div class="hero-portrait-bottom">
+            <span>Establecimiento Nº 01 · Ciempozuelos</span>
+            <span class="accent">Forjado en hierro</span>
           </div>
         </div>
       </div>
@@ -1737,6 +2444,24 @@
     </div>
   </div>
 
+  <!-- ================= WORDMARK BANNER ================= -->
+  <section class="wordmark-banner reveal" aria-hidden="true">
+    <div class="wordmark-banner-inner">
+      <div class="wordmark-line">
+        <span>Desde</span>
+        <span class="slash">/</span>
+        <span class="red">2012</span>
+        <span class="slash">/</span>
+        <span class="outline">Hierro</span>
+      </div>
+      <div class="wordmark-meta">
+        <span class="file">Archivo · N.º 01 / 24</span>
+        <span>Catorce años · Una misma sala · Misma raza</span>
+        <span>Ciempozuelos · Madrid</span>
+      </div>
+    </div>
+  </section>
+
   <!-- ================= CTA STRIP ================= -->
   <section class="cta-strip">
     <div class="wrap">
@@ -1755,12 +2480,6 @@
 
 
     <div class="manifesto-hero reveal">
-      <h2 class="manifesto-quote">
-        El gimnasio<br>
-        que no se<br>
-        vende <em>como</em><br>
-        <span class="red">tal.</span>
-      </h2>
       <div class="eyebrow">Un gimnasio honesto · Sin atajos · Sin postureo</div>
     </div>
 
@@ -1935,9 +2654,9 @@
       </div>
       <div class="gallery-grid">
 
-        <div class="gallery-card reveal">
-          <div class="gallery-card-bg"><svg viewBox="0 0 80 80" fill="none"><rect x="8" y="36" width="64" height="8" rx="4" stroke="#c9222a" stroke-width="2"/><rect x="2" y="28" width="12" height="24" rx="2" stroke="#c9222a" stroke-width="2"/><rect x="66" y="28" width="12" height="24" rx="2" stroke="#c9222a" stroke-width="2"/><line x1="40" y1="20" x2="40" y2="60" stroke="#c9222a" stroke-width="2"/></svg></div>
-          <div class="gallery-card-corner">Sala 01</div>
+        <div class="gallery-card photo photo-corners reveal">
+          <div class="gallery-card-corner">Sala 01 · F-02</div>
+          <div class="photo-watermark">Peso<br>Libre</div>
           <div class="gallery-card-body">
             <div class="gallery-card-tag">Zona principal</div>
             <div class="gallery-card-name">Peso libre &amp; barras olímpicas</div>
@@ -1945,9 +2664,9 @@
           <div class="gallery-card-bar"></div>
         </div>
 
-        <div class="gallery-card reveal">
-          <div class="gallery-card-bg"><svg viewBox="0 0 80 80" fill="none"><rect x="20" y="15" width="40" height="50" rx="4" stroke="#c9222a" stroke-width="2"/><line x1="20" y1="30" x2="60" y2="30" stroke="#c9222a" stroke-width="2"/><line x1="20" y1="45" x2="60" y2="45" stroke="#c9222a" stroke-width="2"/><circle cx="40" cy="58" r="5" stroke="#c9222a" stroke-width="2"/></svg></div>
-          <div class="gallery-card-corner">Sala 01</div>
+        <div class="gallery-card photo photo-corners reveal">
+          <div class="gallery-card-corner">Sala 01 · F-03</div>
+          <div class="photo-watermark">Placas</div>
           <div class="gallery-card-body">
             <div class="gallery-card-tag">Musculación</div>
             <div class="gallery-card-name">Máquinas de placas</div>
@@ -1955,9 +2674,9 @@
           <div class="gallery-card-bar"></div>
         </div>
 
-        <div class="gallery-card reveal">
-          <div class="gallery-card-bg"><svg viewBox="0 0 80 80" fill="none"><ellipse cx="40" cy="55" rx="20" ry="8" stroke="#c9222a" stroke-width="2"/><circle cx="40" cy="30" r="12" stroke="#c9222a" stroke-width="2"/><line x1="40" y1="42" x2="40" y2="47" stroke="#c9222a" stroke-width="2"/></svg></div>
-          <div class="gallery-card-corner">Sala 01</div>
+        <div class="gallery-card photo photo-corners reveal">
+          <div class="gallery-card-corner">Sala 01 · F-04</div>
+          <div class="photo-watermark">Cardio</div>
           <div class="gallery-card-body">
             <div class="gallery-card-tag">Cardio</div>
             <div class="gallery-card-name">Cintas &amp; bicicletas</div>
@@ -1965,9 +2684,9 @@
           <div class="gallery-card-bar"></div>
         </div>
 
-        <div class="gallery-card reveal">
-          <div class="gallery-card-bg"><svg viewBox="0 0 80 80" fill="none"><rect x="10" y="10" width="60" height="60" rx="2" stroke="#c9222a" stroke-width="2"/><line x1="10" y1="25" x2="70" y2="25" stroke="#c9222a" stroke-width="1.5"/><line x1="25" y1="25" x2="25" y2="70" stroke="#c9222a" stroke-width="1.5"/><circle cx="46" cy="47" r="8" stroke="#c9222a" stroke-width="2"/></svg></div>
-          <div class="gallery-card-corner">Box 01</div>
+        <div class="gallery-card photo photo-corners reveal">
+          <div class="gallery-card-corner">Box 01 · F-05</div>
+          <div class="photo-watermark">Rig</div>
           <div class="gallery-card-body">
             <div class="gallery-card-tag">CrossFit</div>
             <div class="gallery-card-name">Rig &amp; pull-up bar</div>
@@ -1975,9 +2694,9 @@
           <div class="gallery-card-bar"></div>
         </div>
 
-        <div class="gallery-card reveal">
-          <div class="gallery-card-bg"><svg viewBox="0 0 80 80" fill="none"><path d="M20 60 Q40 10 60 60" stroke="#c9222a" stroke-width="2" fill="none"/><circle cx="20" cy="60" r="5" stroke="#c9222a" stroke-width="2"/><circle cx="60" cy="60" r="5" stroke="#c9222a" stroke-width="2"/><circle cx="40" cy="30" r="5" stroke="#c9222a" stroke-width="2"/></svg></div>
-          <div class="gallery-card-corner">Box 01</div>
+        <div class="gallery-card photo photo-corners reveal">
+          <div class="gallery-card-corner">Box 01 · F-06</div>
+          <div class="photo-watermark">Bumpers</div>
           <div class="gallery-card-body">
             <div class="gallery-card-tag">Halterofilia</div>
             <div class="gallery-card-name">Bumpers &amp; plataformas</div>
@@ -2115,9 +2834,14 @@
       </div>
       <div class="coaches-grid">
         <div class="coach reveal">
-          <div class="coach-img">
+          <div class="coach-img photo photo-corners">
+            <span class="coach-tag">Coach · 01</span>
             <span class="coach-num">01 / 02</span>
-            <span class="coach-initials">G</span>
+            <div class="photo-watermark">G</div>
+            <div class="coach-caption">
+              <span class="l">Retrato editorial · Goyo</span>
+              <span>Reemplazar</span>
+            </div>
           </div>
           <div class="coach-info">
             <div class="coach-name">Goyo</div>
@@ -2126,9 +2850,14 @@
           </div>
         </div>
         <div class="coach reveal">
-          <div class="coach-img">
+          <div class="coach-img photo photo-corners">
+            <span class="coach-tag">Coach · 02</span>
             <span class="coach-num">02 / 02</span>
-            <span class="coach-initials">L</span>
+            <div class="photo-watermark">L</div>
+            <div class="coach-caption">
+              <span class="l">Retrato editorial · Lázaro</span>
+              <span>Reemplazar</span>
+            </div>
           </div>
           <div class="coach-info">
             <div class="coach-name">Lázaro</div>
@@ -2277,21 +3006,138 @@
             </form>
           </div>
 
-          <div class="map-card reveal">
-          <iframe
-            src="https://maps.google.com/maps?q=C.+de+Lope+de+Vega+10,+28350+Ciempozuelos,+Madrid&t=&z=16&ie=UTF8&iwloc=&output=embed"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            title="Ubicación de Quality Life Gym en Ciempozuelos"
-            allowfullscreen></iframe>
-          <a class="map-card-cta"
-             href="https://maps.google.com/?q=C.+de+Lope+de+Vega+10,+28350+Ciempozuelos,+Madrid"
-             target="_blank"
-             rel="noopener">
-            <span>C. de Lope de Vega, 10 · Ciempozuelos</span>
-            <span class="arrow">Cómo llegar →</span>
-          </a>
-        </div>
+          <div class="access-card reveal">
+            <div class="access-card-head">
+              <div>
+                <div class="access-card-eyebrow">Ficha de acceso</div>
+                <div class="access-card-title">Cómo llegar.</div>
+              </div>
+              <div class="access-card-stamp">
+                <span class="accent">N.º 01 / 24</span><br>
+                Ciempozuelos<br>
+                Madrid
+              </div>
+            </div>
+
+            <div class="access-coords">
+              <span>40.16°<span class="lbl"> N</span></span>
+              <span class="sep">·</span>
+              <span>3.61°<span class="lbl"> W</span></span>
+            </div>
+
+            <div class="access-schematic" aria-hidden="true">
+              <span class="access-schematic-corner tl">↑ N</span>
+              <span class="access-schematic-corner tr">Plano · F-07</span>
+              <span class="access-schematic-corner bl">Esc. ≈ 1 : 4 000</span>
+              <span class="access-schematic-corner br">Q.L.G.</span>
+              <svg viewBox="0 0 420 180" preserveAspectRatio="xMidYMid meet" fill="none">
+                <defs>
+                  <pattern id="rail-ties" x="0" y="0" width="6" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(-6)">
+                    <line x1="0" y1="0" x2="0" y2="4" stroke="#c9222a" stroke-width="0.5" opacity="0.45"/>
+                  </pattern>
+                </defs>
+
+                <!-- block / parcel fills (irregular) -->
+                <g fill="rgba(237,232,224,0.025)">
+                  <path d="M0 0 L130 0 L128 42 L0 46 Z"/>
+                  <path d="M130 0 L250 0 L252 44 L128 42 Z"/>
+                  <path d="M250 0 L420 0 L420 44 L252 44 Z"/>
+                  <path d="M0 46 L128 42 L130 95 L0 100 Z"/>
+                  <path d="M252 44 L420 44 L420 96 L256 98 Z"/>
+                  <path d="M0 100 L130 95 L138 150 L0 156 Z"/>
+                  <path d="M195 110 L260 105 L268 152 L200 158 Z"/>
+                  <path d="M268 152 L420 145 L420 180 L270 180 Z"/>
+                </g>
+
+                <!-- secondary streets (organic, with curves) -->
+                <g stroke="rgba(237,232,224,0.18)" stroke-width="0.7" fill="none" stroke-linecap="round">
+                  <path d="M0 44 Q 130 40 252 44 T 420 44"/>
+                  <path d="M0 156 Q 80 152 138 150 T 268 152 Q 360 148 420 145"/>
+                  <path d="M130 0 Q 132 30 138 60 T 138 150"/>
+                  <path d="M250 0 Q 254 30 256 50 T 260 105 Q 264 130 268 152"/>
+                </g>
+
+                <!-- main road (curved, prominent — C/ Lope de Vega) -->
+                <path d="M0 98 Q 90 92 195 96 T 420 96"
+                      stroke="rgba(237,232,224,0.55)" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <!-- main road dashed center line -->
+                <path d="M0 98 Q 90 92 195 96 T 420 96"
+                      stroke="rgba(237,232,224,0.18)" stroke-width="0.6" stroke-dasharray="3 5" fill="none"/>
+
+                <!-- diagonal secondary connector -->
+                <path d="M308 0 Q 295 60 270 110 Q 250 140 200 158"
+                      stroke="rgba(237,232,224,0.22)" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+
+                <!-- plaza / roundabout -->
+                <circle cx="195" cy="96" r="6" fill="none" stroke="rgba(237,232,224,0.45)" stroke-width="0.8"/>
+                <circle cx="195" cy="96" r="2.5" fill="rgba(237,232,224,0.25)"/>
+
+                <!-- railway band (slightly angled, with red ties pattern) -->
+                <line x1="-10" y1="148" x2="430" y2="140"
+                      stroke="#c9222a" stroke-width="1" stroke-dasharray="5 4" opacity="0.55"/>
+
+                <!-- street labels -->
+                <g font-family="JetBrains Mono, monospace" font-size="5.8" letter-spacing="2.2">
+                  <text x="14" y="94" fill="#9a9590">C/ LOPE DE VEGA</text>
+                  <text x="146" y="40" fill="#5a5550">PZA. MAYOR</text>
+                  <text x="14" y="156" fill="#5a5550">C/ DEL MOLINO</text>
+                </g>
+
+                <!-- gym marker -->
+                <g transform="translate(108,96)">
+                  <circle r="26" fill="none" stroke="#c9222a" stroke-width="0.5" opacity="0.32"/>
+                  <circle r="16" fill="none" stroke="#c9222a" stroke-width="0.6" opacity="0.7"/>
+                  <line x1="-28" y1="0" x2="-18" y2="0" stroke="#c9222a" stroke-width="1"/>
+                  <line x1="18" y1="0" x2="28" y2="0" stroke="#c9222a" stroke-width="1"/>
+                  <line x1="0" y1="-28" x2="0" y2="-18" stroke="#c9222a" stroke-width="1"/>
+                  <line x1="0" y1="18" x2="0" y2="28" stroke="#c9222a" stroke-width="1"/>
+                  <rect x="-5" y="-5" width="10" height="10" fill="#c9222a" transform="rotate(45)"/>
+                  <text x="0" y="-34" text-anchor="middle" font-family="Anton, sans-serif" font-size="11" fill="#ede8e0" letter-spacing="1.5">QUALITY LIFE</text>
+                  <text x="0" y="44" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="5.8" fill="#c9222a" letter-spacing="2.2">C/ LOPE DE VEGA, 10</text>
+                </g>
+
+                <!-- station marker -->
+                <g transform="translate(348,143)">
+                  <circle r="8" fill="none" stroke="#c9222a" stroke-width="0.5" opacity="0.45"/>
+                  <circle r="3" fill="#c9222a"/>
+                  <text x="14" y="2" font-family="JetBrains Mono, monospace" font-size="5.6" fill="#9a9590" letter-spacing="2">EST.</text>
+                </g>
+              </svg>
+            </div>
+
+            <div class="access-modes">
+              <div class="access-mode">
+                <div class="access-mode-label">A pie</div>
+                <div class="access-mode-time">12<span class="unit">min</span></div>
+                <div class="access-mode-detail">Desde la estación de Cercanías</div>
+              </div>
+              <div class="access-mode">
+                <div class="access-mode-label">En coche</div>
+                <div class="access-mode-time">2<span class="unit">min</span></div>
+                <div class="access-mode-detail">Parking gratuito en calle</div>
+              </div>
+              <div class="access-mode">
+                <div class="access-mode-label">Tren C-3</div>
+                <div class="access-mode-time">35<span class="unit">min</span></div>
+                <div class="access-mode-detail">Desde Madrid · Atocha</div>
+              </div>
+            </div>
+
+            <div class="access-actions">
+              <a class="access-btn primary"
+                 href="https://maps.google.com/?q=C.+de+Lope+de+Vega+10,+28350+Ciempozuelos,+Madrid"
+                 target="_blank" rel="noopener">
+                <span>Abrir en Google Maps</span>
+                <span class="arrow">→</span>
+              </a>
+              <a class="access-btn ghost"
+                 href="https://wa.me/34629827400?text=Hola%2C%20%C2%BFc%C3%B3mo%20llego%20al%20gimnasio%3F"
+                 target="_blank" rel="noopener">
+                <span>Pedir indicaciones</span>
+                <span>WhatsApp</span>
+              </a>
+            </div>
+          </div>
       </div>
     </div>
   </section>
@@ -2347,7 +3193,7 @@
     </div>
   </footer>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     document.documentElement.classList.add('js-ready');
     // Progress bar
     const progressBar = document.getElementById('progress-bar');
@@ -2477,6 +3323,160 @@
     </svg>
     <span class="whatsapp-tooltip">Escribir por WhatsApp</span>
   </a>
+
+  <!-- ================= TWEAKS PANEL ================= -->
+  <button class="tweaks-toggle" id="tweaks-toggle" type="button" aria-label="Abrir panel de variantes">
+    Variantes
+  </button>
+  <aside class="tweaks-panel" id="tweaks-panel" role="dialog" aria-modal="false" aria-label="Panel de variantes de diseño">
+    <div class="tweaks-head">
+      <span class="tweaks-title">Variantes · Tweaks</span>
+      <span class="tweaks-close" id="tweaks-close" role="button" tabindex="0" aria-label="Cerrar panel"></span>
+    </div>
+    <div class="tweaks-body">
+
+      <div>
+        <div class="tweak-section-title">
+          <span>Densidad</span>
+          <span class="val" data-val="density"></span>
+        </div>
+        <div class="tweak-seg" data-tweak="density">
+          <button type="button" data-value="comfort">Confort</button>
+          <button type="button" data-value="compact">Compacto</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="tweak-section-title">
+          <span>Tipografía display</span>
+          <span class="val" data-val="display"></span>
+        </div>
+        <div class="tweak-seg" data-tweak="display">
+          <button type="button" data-value="anton">Anton</button>
+          <button type="button" data-value="bebas">Bebas</button>
+          <button type="button" data-value="oswald">Oswald</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="tweak-section-title">
+          <span>Grano de fondo</span>
+          <span class="val" data-val="grain"></span>
+        </div>
+        <div class="tweak-seg" data-tweak="grain">
+          <button type="button" data-value="subtle">Sutil</button>
+          <button type="button" data-value="visible">Visible</button>
+          <button type="button" data-value="none">Sin grano</button>
+        </div>
+      </div>
+
+      <div class="tweaks-meta">
+        <span class="accent">·</span> Cambios en vivo<br>
+        Quality Life · Variantes para presentación
+      </div>
+
+    </div>
+  </aside>
+
+  <script>
+  (function () {
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "density": "comfort",
+      "display": "anton",
+      "grain": "subtle"
+    }/*EDITMODE-END*/;
+
+    const LABELS = {
+      density: { comfort: 'Confort', compact: 'Compacto' },
+      display: { anton: 'Anton', bebas: 'Bebas Neue', oswald: 'Oswald' },
+      grain:   { subtle: 'Sutil', visible: 'Visible', none: 'Sin grano' }
+    };
+
+    const state = { ...TWEAK_DEFAULTS };
+    const html = document.documentElement;
+
+    function apply(key, value) {
+      state[key] = value;
+      // Default values stay clean (no data-attr needed for defaults that match :root)
+      if (key === 'density') {
+        if (value === 'comfort') html.removeAttribute('data-density');
+        else html.setAttribute('data-density', value);
+      } else if (key === 'display') {
+        if (value === 'anton') html.removeAttribute('data-display');
+        else html.setAttribute('data-display', value);
+      } else if (key === 'grain') {
+        if (value === 'subtle') html.removeAttribute('data-grain');
+        else html.setAttribute('data-grain', value);
+      }
+      updateActive(key);
+      updateValueLabel(key);
+    }
+
+    function updateActive(key) {
+      const groupContainer = document.querySelector('[data-tweak="' + key + '"]');
+      if (!groupContainer) return;
+      groupContainer.querySelectorAll('[data-value]').forEach(el => {
+        el.classList.toggle('active', el.dataset.value === state[key]);
+      });
+    }
+
+    function updateValueLabel(key) {
+      const lbl = document.querySelector('.val[data-val="' + key + '"]');
+      if (lbl && LABELS[key]) lbl.textContent = LABELS[key][state[key]] || '';
+    }
+
+    function handleChange(key, value) {
+      apply(key, value);
+      try {
+        window.parent.postMessage({
+          type: '__edit_mode_set_keys',
+          edits: { [key]: value }
+        }, '*');
+      } catch (e) {}
+    }
+
+    // Wire up controls
+    document.querySelectorAll('[data-tweak]').forEach(group => {
+      const key = group.dataset.tweak;
+      group.addEventListener('click', e => {
+        const target = e.target.closest('[data-value]');
+        if (!target) return;
+        handleChange(key, target.dataset.value);
+      });
+    });
+
+    // Apply initial state
+    Object.entries(state).forEach(([k, v]) => apply(k, v));
+
+    // Panel open/close (local handle)
+    const panel = document.getElementById('tweaks-panel');
+    const toggleBtn = document.getElementById('tweaks-toggle');
+    const closeBtn = document.getElementById('tweaks-close');
+    let isOpen = false;
+
+    function setOpen(open, fromHost) {
+      isOpen = open;
+      panel.classList.toggle('open', open);
+      toggleBtn.classList.toggle('hidden', open);
+      if (!open && !fromHost) {
+        try { window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*'); } catch (e) {}
+      }
+    }
+
+    toggleBtn.addEventListener('click', () => setOpen(true));
+    closeBtn.addEventListener('click', () => setOpen(false));
+    closeBtn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') setOpen(false); });
+
+    // Host protocol: register listener FIRST, then announce availability
+    window.addEventListener('message', e => {
+      const data = e.data;
+      if (!data || typeof data !== 'object') return;
+      if (data.type === '__activate_edit_mode') setOpen(true, true);
+      else if (data.type === '__deactivate_edit_mode') setOpen(false, true);
+    });
+    try { window.parent.postMessage({ type: '__edit_mode_available' }, '*'); } catch (e) {}
+  })();
+  </script>
 
 </body>
 </html>
