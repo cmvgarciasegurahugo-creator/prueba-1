@@ -1,0 +1,986 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Catálogo · Web y Automatización para empresas</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+  /* ---------- Tokens ---------- */
+  :root{
+    --ink:        #1a1d22;
+    --ink-2:      #4a525c;
+    --ink-3:      #7b8390;
+    --rule:       #e6e8ec;
+    --rule-2:     #f1f2f5;
+    --paper:      #ffffff;
+    --bg:         #eceef2;
+
+    --brand:      #1F4788;
+    --brand-2:    #2E5C8A;
+    --brand-ink:  #102d57;
+    --brand-soft: #eef2f8;
+
+    --orange:     #E07A1F;
+    --orange-soft:#fdf3e8;
+    --green:      #2F8F4F;
+    --green-soft: #ecf6ef;
+    --red:        #C0392B;
+    --red-soft:   #fbeeec;
+    --violet:     #6B4FB8;
+    --violet-soft:#f1edf9;
+    --teal:       #1F7A8C;
+    --teal-soft:  #e9f3f5;
+
+    /* A4 */
+    --page-w: 210mm;
+    --page-h: 297mm;
+    --mx: 20mm;
+    --my: 18mm; /* reducido de 22mm para ganar espacio vertical */
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  }
+
+  /* ---------- Stage ---------- */
+  .stage{
+    padding: 32px 24px 80px;
+    display:flex; flex-direction:column; align-items:center; gap: 28px;
+  }
+  .toolbar{
+    position: sticky; top: 12px; z-index: 50;
+    display:flex; gap:8px; align-items:center;
+    background: #ffffffd9; backdrop-filter: blur(10px);
+    border:1px solid var(--rule);
+    border-radius: 999px; padding: 6px 8px 6px 14px;
+    font-size: 12.5px; color: var(--ink-2);
+    box-shadow: 0 6px 20px rgba(20,30,50,.06);
+  }
+  .toolbar .dot{width:8px;height:8px;border-radius:50%;background:var(--brand);}
+  .toolbar button{
+    appearance:none;border:0;background:var(--ink);color:#fff;
+    font: 600 12px/1 "Helvetica Neue", Arial, sans-serif;
+    padding: 8px 12px; border-radius:999px; cursor:pointer; letter-spacing:.02em;
+  }
+  .toolbar button.ghost{background:transparent;color:var(--ink);border:1px solid var(--rule)}
+
+  /* ---------- Page ---------- */
+  .page{
+    width: var(--page-w); height: var(--page-h);
+    background: var(--paper);
+    box-shadow:
+      0 1px 0 rgba(20,30,50,.04),
+      0 20px 40px -20px rgba(20,30,50,.18),
+      0 40px 80px -40px rgba(20,30,50,.16);
+    position: relative; overflow:hidden;
+    padding: var(--my) var(--mx);
+    display: flex; flex-direction: column;
+  }
+
+  /* page chrome (header strip + footer) on inner pages */
+  .page .pg-head{
+    position:absolute; left: var(--mx); right: var(--mx); top: 10mm;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size: 9pt; color: var(--ink-3); letter-spacing:.08em; text-transform:uppercase;
+  }
+  .page .pg-head .mark{display:flex; align-items:center; gap:8px}
+  .page .pg-head .mark .sq{width:14px;height:14px;background:var(--brand);border-radius:3px;}
+  .page .pg-foot{
+    position:absolute; left: var(--mx); right: var(--mx); bottom: 9mm;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size: 8.5pt; color: var(--ink-3); letter-spacing:.04em;
+    border-top: 1px solid var(--rule); padding-top: 5mm;
+  }
+  .page .pg-foot .meta{color:var(--ink-3)}
+
+  /* ---------- Type ---------- */
+  h1,h2,h3,h4,p{margin:0}
+  .eyebrow{
+    font-size: 10pt; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--brand); font-weight: 700;
+  }
+  .h-display{
+    font-size: 56pt; line-height: .98; font-weight: 800;
+    letter-spacing: -.02em; color: var(--ink);
+  }
+  .h-section{
+    font-size: 32pt; line-height: 1.04; font-weight: 800;
+    letter-spacing: -.015em; color: var(--ink);
+  }
+  .h-sub{ font-size: 18pt; line-height: 1.2; font-weight: 700; color: var(--ink); letter-spacing:-.01em; }
+  .lede{ font-size: 13pt; line-height: 1.45; color: var(--ink-2); font-weight: 400; }
+  .body{ font-size: 11pt; line-height: 1.55; color: var(--ink-2); }
+  .small{ font-size: 9pt; line-height: 1.5; color: var(--ink-3); }
+  .num-tag{
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-feature-settings: "tnum" 1;
+    font-weight: 800;
+  }
+
+  /* ---------- Cover (page 1) ---------- */
+  .cover{
+    background:
+      radial-gradient(120% 80% at 100% 0%, rgba(255,255,255,.06), transparent 60%),
+      linear-gradient(180deg, #163766 0%, #1F4788 55%, #2E5C8A 100%);
+    color: #fff;
+    padding: 0;
+  }
+  .cover .inner{
+    position: absolute; inset: 0;
+    padding: var(--my) var(--mx);
+    display:flex; flex-direction:column; justify-content:space-between;
+  }
+  .cover .logo{display:flex; align-items:center; gap:10px; color:#fff;}
+  .cover .logo .sq{
+    width: 28px; height: 28px; border-radius: 6px;
+    background: #fff; display:grid; place-items:center; color: var(--brand);
+    font-weight: 800; font-size: 14pt;
+  }
+  .cover .logo .wordmark{
+    font-size: 10pt; letter-spacing: .22em; text-transform: uppercase; opacity:.9;
+  }
+  .cover .year{
+    font-size: 10pt; letter-spacing:.22em; text-transform: uppercase; opacity:.7;
+  }
+
+  .cover .title{ color:#fff; max-width: 165mm; }
+  .cover .title .eyebrow{ color: #ffd9b0; }
+  .cover .title h1{
+    font-size: 64pt; line-height: .96; font-weight: 800;
+    letter-spacing: -.025em; margin-top: 14px;
+  }
+  .cover .title h1 em{
+    font-style: normal; color:#ffd9b0; font-weight: 800;
+  }
+  .cover .title .sub{
+    margin-top: 22px; font-size: 16pt; line-height: 1.35; max-width: 140mm;
+    color: #d9e3f1; font-weight: 400;
+  }
+
+  .cover .meta-row{
+    display:flex; justify-content:space-between; align-items:flex-end; gap:24px;
+    border-top: 1px solid rgba(255,255,255,.18); padding-top: 16px;
+  }
+  .cover .meta-row .col{ display:flex; flex-direction:column; gap:6px;}
+  .cover .meta-row .k{ font-size:9pt; letter-spacing:.18em; text-transform:uppercase; color:#a9bcd9; }
+  .cover .meta-row .v{ font-size:12pt; color:#fff; font-weight:600; }
+  .cover .qr{
+    width: 92px; height: 92px; background: #fff; border-radius: 8px;
+    padding: 8px; display:grid; place-items:center;
+  }
+  .cover .qr svg{display:block}
+  .cover .qr-cap{ color:#a9bcd9; font-size:8.5pt; text-align:center; margin-top:6px; letter-spacing:.06em;}
+
+  /* decorative grid on cover */
+  .cover .deco{
+    position:absolute; inset:0; pointer-events:none; opacity:.13;
+    background-image:
+      linear-gradient(to right, #fff 1px, transparent 1px),
+      linear-gradient(to bottom, #fff 1px, transparent 1px);
+    background-size: 24mm 24mm;
+    mask-image: radial-gradient(80% 60% at 80% 30%, #000, transparent 75%);
+  }
+  .cover .glyph{
+    position:absolute; right:-30mm; bottom:-30mm; width: 160mm; height: 160mm;
+    border-radius: 50%; border:1px solid rgba(255,255,255,.18);
+    box-shadow: inset 0 0 0 22mm rgba(255,255,255,.04);
+  }
+
+  /* ---------- Generic section header ---------- */
+  .sec-head{
+    display:flex; align-items:flex-end; justify-content:space-between; gap: 24px;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 10mm; /* reducido de 14mm */
+    margin-bottom: 8mm;   /* reducido de 12mm */
+  }
+  .sec-head .lh .eyebrow{ display:block; margin-bottom: 8px; }
+  .sec-head .lh h2{ max-width: 130mm; }
+  .sec-head .rh{
+    color: var(--ink-3); font-size: 64pt; line-height: .9; font-weight: 800;
+    letter-spacing: -.04em; font-feature-settings:"tnum" 1;
+  }
+
+  /* ---------- Quiénes somos ---------- */
+  .who-grid{
+    display:grid; grid-template-columns: 1fr 1fr; gap: 14mm;
+  }
+  .who-grid p + p{ margin-top: 6mm; }
+  .who-grid .lede{ font-size: 14pt; color: var(--ink); line-height:1.45; font-weight:500;}
+  .who-stats{
+    margin-top: auto;
+    display:grid; grid-template-columns: repeat(3,1fr); gap: 8mm;
+    padding-top: 8mm; /* reducido de 14mm */
+    border-top: 1px solid var(--rule);
+  }
+  .who-stats .stat .n{ font-size: 36pt; font-weight: 800; letter-spacing:-.02em; color: var(--brand);}
+  .who-stats .stat .l{ font-size: 10pt; color: var(--ink-2); margin-top: 2mm;}
+
+  .who-pillars{
+    display:grid; grid-template-columns: repeat(3,1fr); gap: 6mm;
+    margin-top: 8mm; /* reducido de 12mm */
+  }
+  .pillar{
+    border: 1px solid var(--rule); border-radius: 10px; padding: 6mm; /* reducido de 8mm 7mm */
+    background: #fff;
+  }
+  .pillar .ic{
+    width: 30px; height: 30px; border-radius: 6px; background: var(--brand-soft);
+    color: var(--brand); display:grid; place-items:center; margin-bottom: 4mm; /* reducido de 6mm */
+    font-weight:800;
+  }
+  .pillar h4{ font-size: 12pt; font-weight: 700; color: var(--ink); margin-bottom: 3mm;}
+  .pillar p{ font-size: 10pt; color: var(--ink-2); line-height: 1.5;}
+
+  /* ---------- Problemas ---------- */
+  .prob-grid{
+    display:grid; grid-template-columns: 1fr 1fr; gap: 7mm; flex:1;
+  }
+  .prob{
+    border: 1px solid var(--rule); border-radius: 12px;
+    padding: 8mm; /* reducido de 10mm 9mm */
+    background: #fff;
+    display:flex; flex-direction:column; gap: 4mm; /* reducido de 6mm */
+    position: relative; overflow:hidden;
+  }
+  .prob .top{
+    display:flex; align-items:center; gap: 12px;
+  }
+  .prob .x{
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--red-soft); color: var(--red);
+    display:grid; place-items:center; font-size: 18pt; font-weight: 800;
+    flex-shrink:0;
+  }
+  .prob .ord{
+    margin-left:auto; font-size: 10pt; color: var(--ink-3); letter-spacing:.18em;
+  }
+  .prob h3{ font-size: 14pt; font-weight: 700; color: var(--ink); line-height: 1.2; max-width: 70mm;}
+  .prob .arrow{
+    display:flex; align-items:center; gap: 8mm;
+    margin-top: auto; padding-top: 5mm; border-top: 1px dashed var(--rule);
+  }
+  .prob .arrow .from{ font-size: 10pt; color: var(--ink-3); flex: 1; }
+  .prob .arrow .to{ font-size: 10.5pt; color: var(--ink); font-weight: 600; flex: 1; }
+  .prob .arrow .gt{ color: var(--red); font-weight: 800; }
+
+  /* ---------- Servicios ---------- */
+  .svc-grid{
+    display:grid; grid-template-columns: 1fr 1fr; gap: 5mm; /* reducido de 6mm */
+    flex:1;
+  }
+  .svc{
+    border: 1px solid var(--rule); border-radius: 12px;
+    padding: 6mm 7mm; /* reducido de 9mm 8mm 8mm */
+    background: #fff;
+    display:flex; flex-direction:column; gap: 3mm; /* reducido de 5mm */
+    position: relative; overflow:hidden;
+  }
+  .svc .top-bar{
+    position:absolute; left:0; top:0; height: 4px; width: 100%;
+    background: var(--brand);
+  }
+  .svc.--orange .top-bar{ background: var(--orange);}
+  .svc.--green  .top-bar{ background: var(--green);}
+  .svc.--violet .top-bar{ background: var(--violet);}
+  .svc.--teal   .top-bar{ background: var(--teal);}
+  .svc.--red    .top-bar{ background: var(--red);}
+
+  .svc .head{ display:flex; align-items:center; gap: 4mm; }
+  .svc .ic{
+    width: 36px; height: 36px; border-radius: 10px; /* reducido de 44px */
+    display:grid; place-items:center; font-size: 16pt; /* reducido de 18pt */
+    background: var(--brand-soft); color: var(--brand);
+  }
+  .svc.--orange .ic{ background: var(--orange-soft); color: var(--orange);}
+  .svc.--green  .ic{ background: var(--green-soft);  color: var(--green);}
+  .svc.--violet .ic{ background: var(--violet-soft); color: var(--violet);}
+  .svc.--teal   .ic{ background: var(--teal-soft);   color: var(--teal);}
+  .svc.--red    .ic{ background: var(--red-soft);    color: var(--red);}
+
+  .svc .no{
+    margin-left:auto; font-size: 10pt; color: var(--ink-3);
+    letter-spacing: .18em; font-weight: 600;
+  }
+  .svc h3{ font-size: 12pt; font-weight: 700; color: var(--ink); line-height: 1.2; } /* reducido de 13.5pt */
+  .svc p{ font-size: 9.5pt; color: var(--ink-2); line-height: 1.5;} /* reducido de 10pt */
+  .svc .feat{
+    display:grid; grid-template-columns: 1fr 1fr; gap: 2mm 4mm; /* reducido de 3mm 5mm */
+    margin-top: 3mm; /* era auto */
+    padding-top: 3mm; /* reducido de 5mm */
+    border-top: 1px solid var(--rule-2);
+  }
+  .svc .feat li{
+    list-style:none; padding-left: 12px; position: relative;
+    font-size: 9pt; color: var(--ink); line-height: 1.4; /* reducido de 9.5pt */
+  }
+  .svc .feat li::before{
+    content:""; position:absolute; left:0; top: 5px;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--brand);
+  }
+  .svc.--orange .feat li::before{ background: var(--orange);}
+  .svc.--green  .feat li::before{ background: var(--green);}
+  .svc.--violet .feat li::before{ background: var(--violet);}
+  .svc.--teal   .feat li::before{ background: var(--teal);}
+  .svc.--red    .feat li::before{ background: var(--red);}
+
+  /* ---------- Cómo trabajamos ---------- */
+  .flow{
+    display:grid; grid-template-columns: repeat(4, 1fr);
+    gap: 0; flex: 1; align-content: start;
+    margin-top: 6mm;
+  }
+  .phase{
+    padding: 7mm 6mm; /* reducido de 9mm 7mm */
+    position: relative;
+    display:flex; flex-direction:column; gap: 4mm;
+    border-right: 1px solid var(--rule);
+  }
+  .phase:last-child{ border-right:0;}
+  .phase .badge{
+    display:inline-flex; align-items:center; gap: 6px;
+    font-size: 9pt; letter-spacing:.18em; text-transform:uppercase;
+    color: var(--ink-3); font-weight: 700;
+  }
+  .phase .badge .b{
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--brand); color:#fff; display:grid; place-items:center;
+    font-size: 10pt; font-weight: 800;
+  }
+  .phase:nth-child(1) .badge .b{ background: var(--brand);}
+  .phase:nth-child(2) .badge .b{ background: var(--teal);}
+  .phase:nth-child(3) .badge .b{ background: var(--orange);}
+  .phase:nth-child(4) .badge .b{ background: var(--green);}
+  .phase h3{ font-size: 14pt; font-weight: 800; color: var(--ink); margin-top: 2mm;}
+  .phase p{ font-size: 10pt; color: var(--ink-2); line-height: 1.55;}
+  .phase .meta{
+    margin-top: auto; padding-top: 6mm; border-top: 1px dashed var(--rule);
+    font-size: 9pt; color: var(--ink-3); letter-spacing: .04em;
+  }
+  .flow-rail{
+    position: relative; height: 36px; margin-top: 4mm; /* reducido de 6mm */
+    border-top: 1px dashed var(--rule);
+  }
+  .flow-rail .tick{
+    position:absolute; top: -7px; width: 14px; height: 14px;
+    border-radius: 50%; background: #fff; border: 2px solid var(--brand);
+  }
+  .flow-rail .tick:nth-child(1){ left: 12.5%;}
+  .flow-rail .tick:nth-child(2){ left: 37.5%; border-color: var(--teal);}
+  .flow-rail .tick:nth-child(3){ left: 62.5%; border-color: var(--orange);}
+  .flow-rail .tick:nth-child(4){ left: 87.5%; border-color: var(--green); background: var(--green);}
+
+  .flow-promise{
+    margin-top: 7mm; /* reducido de 10mm */
+    border: 1px solid var(--rule); border-radius: 12px;
+    padding: 6mm 8mm; /* reducido de 8mm 9mm */
+    background: var(--brand-soft);
+    display:grid; grid-template-columns: 1fr auto; gap: 8mm; align-items:center;
+  }
+  .flow-promise h4{ font-size: 14pt; font-weight: 700; color: var(--brand-ink);}
+  .flow-promise p{ font-size: 10.5pt; color: var(--ink-2); margin-top: 2mm;}
+  .flow-promise .pill{
+    border-radius: 999px; background: #fff; color: var(--brand);
+    padding: 6mm 8mm; font-weight: 700; font-size: 11pt;
+    border: 1px solid var(--brand);
+  }
+
+  /* ---------- Contacto ---------- */
+  .next-grid{
+    display:grid; grid-template-columns: 1.05fr .95fr; gap: 12mm; flex:1;
+  }
+  .steps{ display:flex; flex-direction:column; gap: 6mm; }
+  .step{
+    display:grid; grid-template-columns: 56px 1fr; gap: 6mm;
+    padding: 5mm 0; border-bottom: 1px solid var(--rule);
+  }
+  .step:last-child{ border-bottom: 0;}
+  .step .n{
+    font-size: 36pt; font-weight: 800; color: var(--brand);
+    line-height: 1; letter-spacing: -.03em;
+  }
+  .step h4{ font-size: 14pt; font-weight: 700; color: var(--ink); margin-bottom: 2mm;}
+  .step p{ font-size: 11pt; color: var(--ink-2); line-height: 1.5;}
+
+  .contact-card{
+    background: var(--brand);
+    color: #fff;
+    border-radius: 14px;
+    padding: 7mm; /* reducido de 9mm */
+    display:flex; flex-direction:column; gap: 3mm; /* reducido de 4mm */
+    position: relative; overflow: hidden;
+  }
+  .contact-card .eyebrow{ color: #ffd9b0;}
+  .contact-card h3{
+    font-size: 18pt; line-height: 1.15; font-weight: 800; letter-spacing: -.015em; /* reducido de 20pt */
+    color: #fff;
+  }
+  .contact-card .line{
+    height: 1px; background: rgba(255,255,255,.2); margin: 2mm 0;
+  }
+  .contact-card .row{
+    display:flex; align-items:center; gap: 5mm;
+  }
+  .contact-card .row .ic{
+    width: 30px; height: 30px; border-radius: 50%; /* reducido de 36px */
+    background: rgba(255,255,255,.14);
+    display:grid; place-items:center; font-size: 12pt; /* reducido de 14pt */
+  }
+  .contact-card .row .v{ font-size: 12pt; font-weight: 700; letter-spacing: -.005em;} /* reducido de 14pt */
+  .contact-card .row .k{ font-size: 9pt; color: #cad6ea; letter-spacing:.16em; text-transform:uppercase;}
+  .contact-card .sig{
+    margin-top: auto; padding-top: 5mm; border-top: 1px solid rgba(255,255,255,.2);
+    display:flex; justify-content:space-between; align-items:flex-end;
+    font-size: 9.5pt; color: #cad6ea;
+  }
+  .contact-card .sig b{ color:#fff; display:block; font-size: 11pt; letter-spacing:.04em;}
+  .contact-card .glyph2{
+    position:absolute; right:-40mm; top:-40mm; width: 140mm; height: 140mm;
+    border-radius: 50%; border: 1px solid rgba(255,255,255,.16);
+    box-shadow: inset 0 0 0 18mm rgba(255,255,255,.04);
+    pointer-events:none;
+  }
+
+  .notes{
+    border: 1px dashed var(--rule); border-radius: 10px;
+    padding: 6mm 7mm; margin-top: 5mm;
+  }
+  .notes .lbl{ font-size: 9pt; color: var(--ink-3); letter-spacing: .18em; text-transform: uppercase; margin-bottom: 3mm; font-weight: 700;}
+  .notes .ln{ height: 1px; background: var(--rule); margin: 4mm 0;}
+
+  /* ---------- Print ---------- */
+  @page { size: A4; margin: 0;}
+  @media print{
+    body{background:#fff;}
+    .stage{padding: 0; gap: 0;}
+    .toolbar{display:none;}
+    .page{
+      width: 210mm; height: 297mm;
+      box-shadow:none; page-break-after: always; break-after: page;
+      margin: 0;
+    }
+    .page:last-child{ page-break-after: auto; }
+  }
+
+  /* ---------- Responsive scale on small screens (preview only) ---------- */
+  @media (max-width: 900px){
+    .stage{
+      transform: scale(.55);
+      transform-origin: top center;
+      /* compensa la reducción de escala para evitar espacio vacío */
+      margin-bottom: calc((var(--page-h) * 6 + 28px * 5) * -0.45);
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="toolbar" role="toolbar" aria-label="Document toolbar">
+    <span class="dot"></span>
+    <span>Catálogo · 6 páginas · A4</span>
+    <button class="ghost" onclick="document.querySelectorAll('.page')[0].scrollIntoView({behavior:'smooth'})">Inicio</button>
+    <button onclick="window.print()">Imprimir / Guardar PDF</button>
+  </div>
+
+  <!-- ===================== PAGE 1 — COVER ===================== -->
+  <section class="page cover" data-screen-label="01 Portada">
+    <div class="deco" aria-hidden="true"></div>
+    <div class="glyph" aria-hidden="true"></div>
+    <div class="inner">
+      <header style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div class="logo">
+          <div class="sq">W</div>
+          <div class="wordmark">Web &amp; Automatización</div>
+        </div>
+        <div class="year">Catálogo · 2026</div>
+      </header>
+
+      <div class="title">
+        <span class="eyebrow">Servicios para pequeños negocios</span>
+        <h1>Web y<br/>Automatización<br/><em>para empresas.</em></h1>
+        <p class="sub">Soluciones digitales que hacen crecer tu negocio.<br/>Sin tecnicismos. Con resultados medibles.</p>
+      </div>
+
+      <div class="meta-row">
+        <div style="display:flex; gap: 18mm;">
+          <div class="col">
+            <span class="k">Para</span>
+            <span class="v">Peluquerías · Consultorios<br/>Gimnasios · Comercios locales</span>
+          </div>
+          <div class="col">
+            <span class="k">Contacto</span>
+            <span class="v">+34 629 827 400<br/>contacto@tusitio.es</span>
+          </div>
+        </div>
+        <div>
+          <div class="qr" aria-label="QR de contacto">
+            <!-- simple decorative QR-like glyph -->
+            <svg viewBox="0 0 64 64" width="76" height="76" aria-hidden="true">
+              <g fill="#1F4788">
+                <rect x="2" y="2" width="18" height="18" rx="2"/>
+                <rect x="6" y="6" width="10" height="10" rx="1" fill="#fff"/>
+                <rect x="9" y="9" width="4" height="4" fill="#1F4788"/>
+                <rect x="44" y="2" width="18" height="18" rx="2"/>
+                <rect x="48" y="6" width="10" height="10" rx="1" fill="#fff"/>
+                <rect x="51" y="9" width="4" height="4" fill="#1F4788"/>
+                <rect x="2" y="44" width="18" height="18" rx="2"/>
+                <rect x="6" y="48" width="10" height="10" rx="1" fill="#fff"/>
+                <rect x="9" y="51" width="4" height="4" fill="#1F4788"/>
+                <rect x="24" y="4" width="4" height="4"/>
+                <rect x="30" y="4" width="4" height="8"/>
+                <rect x="36" y="6" width="4" height="4"/>
+                <rect x="24" y="12" width="8" height="4"/>
+                <rect x="36" y="14" width="4" height="6"/>
+                <rect x="24" y="22" width="4" height="4"/>
+                <rect x="30" y="24" width="6" height="4"/>
+                <rect x="40" y="24" width="4" height="6"/>
+                <rect x="22" y="30" width="6" height="4"/>
+                <rect x="34" y="30" width="4" height="4"/>
+                <rect x="40" y="34" width="6" height="4"/>
+                <rect x="24" y="40" width="4" height="6"/>
+                <rect x="30" y="44" width="6" height="4"/>
+                <rect x="40" y="44" width="4" height="4"/>
+                <rect x="44" y="50" width="6" height="4"/>
+                <rect x="54" y="46" width="4" height="6"/>
+                <rect x="50" y="56" width="4" height="4"/>
+                <rect x="56" y="56" width="6" height="4"/>
+              </g>
+            </svg>
+          </div>
+          <div class="qr-cap">Escanear para contacto</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PAGE 2 — QUIÉNES SOMOS ===================== -->
+  <section class="page" data-screen-label="02 Quiénes somos">
+    <header class="pg-head">
+      <div class="mark"><div class="sq"></div><span>Web &amp; Automatización</span></div>
+      <span>02 · Quiénes somos</span>
+    </header>
+
+    <div style="margin-top: 10mm;"></div>
+
+    <div class="sec-head">
+      <div class="lh">
+        <span class="eyebrow">Sobre nosotros</span>
+        <h2 class="h-section">Estrategia digital<br/>para negocios reales.</h2>
+      </div>
+      <div class="rh num-tag">01</div>
+    </div>
+
+    <div class="who-grid">
+      <div>
+        <p class="lede">Somos una consultoría digital especializada en ayudar a pequeños negocios a crecer a través de soluciones web y automatizaciones profesionales.</p>
+        <p class="body" style="margin-top: 6mm;">Con experiencia en desarrollo web, integraciones de sistemas y automatizaciones empresariales, ofrecemos soluciones que no solo se ven bien, sino que generan resultados medibles.</p>
+      </div>
+      <div>
+        <p class="body">Trabajamos con peluquerías, consultorios, gimnasios y comercios locales que quieren dejar de perder tiempo en tareas manuales y empezar a captar clientes online de forma consistente.</p>
+        <p class="body" style="margin-top: 6mm;">Cada proyecto se entrega con documentación, formación breve y treinta días de soporte técnico incluido — para que tomes el control desde el primer día.</p>
+      </div>
+    </div>
+
+    <div class="who-pillars">
+      <div class="pillar">
+        <div class="ic">✓</div>
+        <h4>Resultados medibles</h4>
+        <p>Cada entrega va acompañada de métricas claras: reservas, leads y tiempo ahorrado.</p>
+      </div>
+      <div class="pillar">
+        <div class="ic">✓</div>
+        <h4>Sin jerga técnica</h4>
+        <p>Te explicamos cada decisión en lenguaje de negocio, no de programador.</p>
+      </div>
+      <div class="pillar">
+        <div class="ic">✓</div>
+        <h4>Soporte real</h4>
+        <p>Treinta días de acompañamiento incluido y planes de mantenimiento opcionales.</p>
+      </div>
+    </div>
+
+    <div class="who-stats">
+      <div class="stat"><div class="n">+40</div><div class="l">Proyectos entregados a pequeños negocios</div></div>
+      <div class="stat"><div class="n">24/7</div><div class="l">Operación de las automatizaciones que desplegamos</div></div>
+      <div class="stat"><div class="n">30 d.</div><div class="l">Soporte técnico incluido tras cada entrega</div></div>
+    </div>
+
+    <footer class="pg-foot">
+      <span>Web y Automatización para empresas</span>
+      <span class="meta">contacto@tusitio.es · +34 629 827 400</span>
+      <span>02 / 06</span>
+    </footer>
+  </section>
+
+  <!-- ===================== PAGE 3 — PROBLEMAS ===================== -->
+  <section class="page" data-screen-label="03 Problemas">
+    <header class="pg-head">
+      <div class="mark"><div class="sq"></div><span>Web &amp; Automatización</span></div>
+      <span>03 · Problemas que resolvemos</span>
+    </header>
+
+    <div style="margin-top: 10mm;"></div>
+
+    <div class="sec-head">
+      <div class="lh">
+        <span class="eyebrow">Diagnóstico</span>
+        <h2 class="h-section">Cuatro fugas comunes<br/>que paramos en seco.</h2>
+      </div>
+      <div class="rh num-tag">02</div>
+    </div>
+
+    <div class="prob-grid">
+      <article class="prob">
+        <div class="top">
+          <div class="x">✕</div>
+          <h3>Sin presencia web profesional</h3>
+          <span class="ord">01</span>
+        </div>
+        <p class="body">Tu negocio no aparece cuando buscan tus servicios en Google. La competencia se queda con esos clientes.</p>
+        <div class="arrow">
+          <div class="from">Hoy</div>
+          <div class="gt">→</div>
+          <div class="to">Potenciales clientes no te encuentran.</div>
+        </div>
+      </article>
+
+      <article class="prob">
+        <div class="top">
+          <div class="x">✕</div>
+          <h3>Procesos manuales repetitivos</h3>
+          <span class="ord">02</span>
+        </div>
+        <p class="body">Copiar datos, mandar confirmaciones, actualizar Excel. Cada semana son horas que no facturas.</p>
+        <div class="arrow">
+          <div class="from">Hoy</div>
+          <div class="gt">→</div>
+          <div class="to">Pierdes horas en tareas automáticas.</div>
+        </div>
+      </article>
+
+      <article class="prob">
+        <div class="top">
+          <div class="x">✕</div>
+          <h3>Información desorganizada</h3>
+          <span class="ord">03</span>
+        </div>
+        <p class="body">Clientes en una hoja, citas en otra, mensajes en WhatsApp. Imposible saber cómo va el negocio.</p>
+        <div class="arrow">
+          <div class="from">Hoy</div>
+          <div class="gt">→</div>
+          <div class="to">Datos esparcidos en Excel, emails y libretas.</div>
+        </div>
+      </article>
+
+      <article class="prob">
+        <div class="top">
+          <div class="x">✕</div>
+          <h3>Sin sistema de reservas</h3>
+          <span class="ord">04</span>
+        </div>
+        <p class="body">Los clientes llaman a horas raras o se van con la competencia que reserva online. Tú pierdes el control de la agenda.</p>
+        <div class="arrow">
+          <div class="from">Hoy</div>
+          <div class="gt">→</div>
+          <div class="to">Clientes llaman en vez de auto‑reservarse.</div>
+        </div>
+      </article>
+    </div>
+
+    <footer class="pg-foot">
+      <span>Web y Automatización para empresas</span>
+      <span class="meta">contacto@tusitio.es · +34 629 827 400</span>
+      <span>03 / 06</span>
+    </footer>
+  </section>
+
+  <!-- ===================== PAGE 4 — SERVICIOS ===================== -->
+  <section class="page" data-screen-label="04 Servicios">
+    <header class="pg-head">
+      <div class="mark"><div class="sq"></div><span>Web &amp; Automatización</span></div>
+      <span>04 · Nuestros servicios</span>
+    </header>
+
+    <div style="margin-top: 10mm;"></div>
+
+    <div class="sec-head" style="padding-bottom: 6mm; margin-bottom: 6mm;">
+      <div class="lh">
+        <span class="eyebrow">Catálogo</span>
+        <h2 class="h-section">Seis servicios.<br/>Una sola promesa: crecer.</h2>
+      </div>
+      <div class="rh num-tag">03</div>
+    </div>
+
+    <div class="svc-grid">
+      <article class="svc">
+        <div class="top-bar"></div>
+        <div class="head">
+          <div class="ic">🌐</div>
+          <span class="no">SERVICIO 01</span>
+        </div>
+        <h3>Web Corporativa Profesional</h3>
+        <p>Sitio web moderno, responsive y optimizado para conversiones.</p>
+        <ul class="feat">
+          <li>Diseño profesional</li>
+          <li>Contacto integrado</li>
+          <li>SEO básico</li>
+          <li>WhatsApp directo</li>
+        </ul>
+      </article>
+
+      <article class="svc --orange">
+        <div class="top-bar"></div>
+        <div class="head">
+          <div class="ic">⚙️</div>
+          <span class="no">SERVICIO 02</span>
+        </div>
+        <h3>Automatizaciones (Zapier / Make)</h3>
+        <p>Conecta tus herramientas sin código. Procesos 24/7, automáticos.</p>
+        <ul class="feat">
+          <li>Formulario → BD</li>
+          <li>Emails automáticos</li>
+          <li>Sincronización</li>
+          <li>Reportes</li>
+        </ul>
+      </article>
+
+      <article class="svc --green">
+        <div class="top-bar"></div>
+        <div class="head">
+          <div class="ic">📅</div>
+          <span class="no">SERVICIO 03</span>
+        </div>
+        <h3>Sistema de Reservas Integrado</h3>
+        <p>Calendario donde los clientes se reservan solos, 24/7.</p>
+        <ul class="feat">
+          <li>Calendario visible</li>
+          <li>Confirmaciones auto.</li>
+          <li>Recordatorios</li>
+          <li>Panel de admin</li>
+        </ul>
+      </article>
+
+      <article class="svc --teal">
+        <div class="top-bar"></div>
+        <div class="head">
+          <div class="ic">💬</div>
+          <span class="no">SERVICIO 04</span>
+        </div>
+        <h3>Bot de WhatsApp Automático</h3>
+        <p>Responde preguntas frecuentes mientras tú duermes.</p>
+        <ul class="feat">
+          <li>Respuestas 24/7</li>
+          <li>Filtrado de leads</li>
+          <li>Más conversiones</li>
+          <li>Menos trabajo manual</li>
+        </ul>
+      </article>
+
+      <article class="svc --violet">
+        <div class="top-bar"></div>
+        <div class="head">
+          <div class="ic">📊</div>
+          <span class="no">SERVICIO 05</span>
+        </div>
+        <h3>Reportes Automáticos</h3>
+        <p>Dashboard que se actualiza solo. Datos claros cada semana.</p>
+        <ul class="feat">
+          <li>Métricas en tiempo real</li>
+          <li>Reportes por email</li>
+          <li>Decisiones con datos</li>
+          <li>Histórico semanal</li>
+        </ul>
+      </article>
+
+      <article class="svc --red">
+        <div class="top-bar"></div>
+        <div class="head">
+          <div class="ic">🔐</div>
+          <span class="no">SERVICIO 06</span>
+        </div>
+        <h3>Portal Completo de Gestión</h3>
+        <p>Sistema personalizado: usuarios, historial, progreso.</p>
+        <ul class="feat">
+          <li>Login seguro</li>
+          <li>Base de datos profesional</li>
+          <li>Experiencia premium</li>
+          <li>Escalable</li>
+        </ul>
+      </article>
+    </div>
+
+    <footer class="pg-foot">
+      <span>Web y Automatización para empresas</span>
+      <span class="meta">contacto@tusitio.es · +34 629 827 400</span>
+      <span>04 / 06</span>
+    </footer>
+  </section>
+
+  <!-- ===================== PAGE 5 — CÓMO TRABAJAMOS ===================== -->
+  <section class="page" data-screen-label="05 Cómo trabajamos">
+    <header class="pg-head">
+      <div class="mark"><div class="sq"></div><span>Web &amp; Automatización</span></div>
+      <span>05 · Cómo trabajamos</span>
+    </header>
+
+    <div style="margin-top: 10mm;"></div>
+
+    <div class="sec-head">
+      <div class="lh">
+        <span class="eyebrow">Metodología</span>
+        <h2 class="h-section">De la llamada inicial<br/>a la entrega final.</h2>
+      </div>
+      <div class="rh num-tag">04</div>
+    </div>
+
+    <div class="flow">
+      <div class="phase">
+        <span class="badge"><span class="b">1</span> Fase 01</span>
+        <h3>Diagnóstico</h3>
+        <p>Llamada gratuita de 20 minutos. Entendemos tu negocio, tus clientes y las tareas que te están robando tiempo.</p>
+        <div class="meta">Duración · 20 min</div>
+      </div>
+      <div class="phase">
+        <span class="badge"><span class="b">2</span> Fase 02</span>
+        <h3>Propuesta</h3>
+        <p>Presupuesto detallado con timeline y servicios específicos. Sin letra pequeña, sin sorpresas.</p>
+        <div class="meta">Duración · 2–3 días</div>
+      </div>
+      <div class="phase">
+        <span class="badge"><span class="b">3</span> Fase 03</span>
+        <h3>Desarrollo</h3>
+        <p>Trabajamos en sprints cortos. Recibes updates regulares y puedes revisar cada hito antes de avanzar.</p>
+        <div class="meta">Duración · 2–6 semanas</div>
+      </div>
+      <div class="phase">
+        <span class="badge"><span class="b">4</span> Fase 04</span>
+        <h3>Entrega &amp; Soporte</h3>
+        <p>Proyecto listo, documentado y en tus manos. Incluye 30 días de soporte técnico para resolver cualquier duda.</p>
+        <div class="meta">Soporte · 30 días</div>
+      </div>
+    </div>
+
+    <div class="flow-rail" aria-hidden="true">
+      <div class="tick"></div>
+      <div class="tick"></div>
+      <div class="tick"></div>
+      <div class="tick"></div>
+    </div>
+
+    <div class="flow-promise">
+      <div>
+        <h4>Sin compromiso hasta que firmes la propuesta.</h4>
+        <p>La llamada de diagnóstico y la propuesta son gratuitas. Solo facturamos cuando empezamos a desarrollar.</p>
+      </div>
+      <div class="pill">100% transparente</div>
+    </div>
+
+    <footer class="pg-foot">
+      <span>Web y Automatización para empresas</span>
+      <span class="meta">contacto@tusitio.es · +34 629 827 400</span>
+      <span>05 / 06</span>
+    </footer>
+  </section>
+
+  <!-- ===================== PAGE 6 — CONTACTO ===================== -->
+  <section class="page" data-screen-label="06 Próximos pasos">
+    <header class="pg-head">
+      <div class="mark"><div class="sq"></div><span>Web &amp; Automatización</span></div>
+      <span>06 · Próximos pasos</span>
+    </header>
+
+    <div style="margin-top: 10mm;"></div>
+
+    <div class="sec-head">
+      <div class="lh">
+        <span class="eyebrow">Próximos pasos</span>
+        <h2 class="h-section">¿Listo para llevar tu<br/>negocio al siguiente nivel?</h2>
+      </div>
+      <div class="rh num-tag">05</div>
+    </div>
+
+    <div class="next-grid">
+      <div class="steps">
+        <div class="step">
+          <div class="n">01</div>
+          <div>
+            <h4>Cuéntanos sobre tu negocio</h4>
+            <p>Llámanos o envía un email. Una conversación breve para entender qué necesitas.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="n">02</div>
+          <div>
+            <h4>Recibe una propuesta personalizada</h4>
+            <p>Sin obligación. Te enviamos un documento claro con servicios, plazos y precio.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="n">03</div>
+          <div>
+            <h4>Ejecutamos y entregamos</h4>
+            <p>Proyecto profesional, documentado y con 30 días de soporte técnico incluido.</p>
+          </div>
+        </div>
+
+        <div class="notes">
+          <div class="lbl">Notas</div>
+          <div class="ln"></div>
+          <div class="ln"></div>
+          <div class="ln"></div>
+        </div>
+      </div>
+
+      <aside class="contact-card">
+        <div class="glyph2" aria-hidden="true"></div>
+        <span class="eyebrow">Hablemos</span>
+        <h3>Una llamada de 20 minutos puede cambiar tu próximo trimestre.</h3>
+        <div class="line"></div>
+        <div class="row">
+          <div class="ic">📞</div>
+          <div>
+            <div class="k">Teléfono</div>
+            <div class="v">+34 629 827 400</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="ic">📧</div>
+          <div>
+            <div class="k">Email</div>
+            <div class="v">contacto@tusitio.es</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="ic">🕐</div>
+          <div>
+            <div class="k">Horario de atención</div>
+            <div class="v" style="font-size:11pt;">L–V · 09:00–19:00 CET</div>
+          </div>
+        </div>
+        <div class="sig">
+          <div>
+            <b>Web y Automatización<br/>para empresas</b>
+            <span>Catálogo de servicios · 2026</span>
+          </div>
+          <div style="text-align:right">
+            <span style="display:block; font-size: 9pt; letter-spacing:.16em; color:#cad6ea; text-transform:uppercase;">Ref.</span>
+            <span style="font-weight:700;">CAT‑2026‑001</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="pg-foot">
+      <span>Web y Automatización para empresas</span>
+      <span class="meta">contacto@tusitio.es · +34 629 827 400</span>
+      <span>06 / 06</span>
+    </footer>
+  </section>
+
+</div>
+
+</body>
+</html>
