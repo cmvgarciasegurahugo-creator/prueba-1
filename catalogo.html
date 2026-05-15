@@ -234,15 +234,15 @@
     position: relative; overflow:hidden;
     box-shadow: 0 1px 4px rgba(20,30,50,.05);
   }
-  .prob .top{ display:flex; align-items:center; gap: 12px; }
+  .prob .top{ display:flex; align-items:flex-start; gap: 10px; }
   .prob .x{
     width: 40px; height: 40px; border-radius: 10px;
     background: var(--red-soft); color: var(--red);
     display:grid; place-items:center; font-size: 18pt; font-weight: 800;
     flex-shrink:0;
   }
-  .prob .ord{ margin-left:auto; font-size: 10pt; color: var(--ink-3); letter-spacing:.18em; }
-  .prob h3{ font-size: 14pt; font-weight: 700; color: var(--ink); line-height: 1.2; max-width: 70mm;}
+  .prob .ord{ flex-shrink:0; font-size: 9.5pt; color: var(--ink-3); letter-spacing:.18em; }
+  .prob h3{ flex:1; font-size: 14pt; font-weight: 700; color: var(--ink); line-height: 1.2; }
   .prob .arrow{
     display:flex; align-items:center; gap: 8mm;
     margin-top: auto; padding-top: 5mm; border-top: 1px dashed var(--rule);
@@ -302,25 +302,25 @@
   .svc h3{ font-size: 12.5pt; font-weight: 700; color: var(--ink); line-height: 1.2; }
   .svc p{ font-size: 9.5pt; color: var(--ink-2); line-height: 1.5;}
   .svc .feat{
-    display:grid; grid-template-columns: 1fr 1fr; gap: 2mm 4mm;
+    display:flex; flex-wrap:wrap; gap: 2.5mm;
     margin-top: 4mm;
     padding-top: 4mm;
     border-top: 1px solid rgba(0,0,0,.06);
   }
   .svc .feat li{
-    list-style:none; padding-left: 13px; position: relative;
-    font-size: 9pt; color: var(--ink); line-height: 1.4;
+    list-style:none;
+    background: var(--brand-soft);
+    border: 1px solid rgba(31,71,136,.15);
+    border-radius: 999px;
+    padding: 1.5mm 4mm;
+    font-size: 8.5pt; font-weight: 500;
+    color: var(--brand); line-height: 1.3;
   }
-  .svc .feat li::before{
-    content:""; position:absolute; left:0; top: 5px;
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--brand);
-  }
-  .svc.--orange .feat li::before{ background: var(--orange);}
-  .svc.--green  .feat li::before{ background: var(--green);}
-  .svc.--violet .feat li::before{ background: var(--violet);}
-  .svc.--teal   .feat li::before{ background: var(--teal);}
-  .svc.--red    .feat li::before{ background: var(--red);}
+  .svc.--orange .feat li{ background: var(--orange-soft); border-color: rgba(224,122,31,.25); color: var(--orange);}
+  .svc.--green  .feat li{ background: var(--green-soft);  border-color: rgba(47,143,79,.25);  color: var(--green);}
+  .svc.--violet .feat li{ background: var(--violet-soft); border-color: rgba(107,79,184,.25); color: var(--violet);}
+  .svc.--teal   .feat li{ background: var(--teal-soft);   border-color: rgba(31,122,140,.25); color: var(--teal);}
+  .svc.--red    .feat li{ background: var(--red-soft);    border-color: rgba(192,57,43,.25);  color: var(--red);}
 
   /* Tarjeta destacada (full-width horizontal) */
   .svc.--featured{
@@ -340,7 +340,6 @@
     border-top: none;
     border-left: 1px solid rgba(0,0,0,.07);
     padding-left: 10mm;
-    grid-template-columns: 1fr 1fr;
     align-self: stretch;
     align-content: center;
   }
@@ -517,6 +516,19 @@
   .notes .lbl{ font-size: 9pt; color: var(--ink-3); letter-spacing: .18em; text-transform: uppercase; margin-bottom: 3mm; font-weight: 700;}
   .notes .ln{ height: 1px; background: var(--rule); margin: 4mm 0;}
 
+  /* ---------- Cover: sector pills ---------- */
+  .cover-sectors{
+    display:flex; flex-wrap:wrap; gap: 5px; margin-top: 6px;
+  }
+  .s-pill{
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.28);
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 10pt; font-weight: 500;
+    color: #fff; letter-spacing:.01em;
+  }
+
   /* ---------- Print ---------- */
   @page { size: A4; margin: 0;}
   @media print{
@@ -562,18 +574,23 @@
       <div class="title">
         <span class="eyebrow">Servicios para pequeños negocios</span>
         <h1>Web y<br/>Automatización<br/><em>para empresas.</em></h1>
-        <p class="sub">Soluciones digitales que hacen crecer tu negocio.<br/>Sin tecnicismos. Con resultados medibles.</p>
+        <p class="sub">Presencia digital. Procesos automáticos.<br/>Resultados reales.</p>
       </div>
 
       <div class="meta-row">
         <div style="display:flex; gap: 18mm;">
-          <div class="col">
-            <span class="k">Para</span>
-            <span class="v">Peluquerías · Consultorios<br/>Gimnasios · Comercios locales</span>
+          <div>
+            <span class="k" style="display:block; margin-bottom:6px;">Especialistas en</span>
+            <div class="cover-sectors">
+              <span class="s-pill">✂️ Peluquerías</span>
+              <span class="s-pill">🏥 Consultorios</span>
+              <span class="s-pill">🏋️ Gimnasios</span>
+              <span class="s-pill">🛍️ Comercios</span>
+            </div>
           </div>
           <div class="col">
             <span class="k">Contacto</span>
-            <span class="v">+34 629 827 400<br/>contacto@tusitio.es</span>
+            <span class="v">686 14 83 74<br/>sadyc.info@gmail.com</span>
           </div>
         </div>
         <div>
@@ -670,7 +687,7 @@
 
     <footer class="pg-foot">
       <span>Web y Automatización para empresas</span>
-      <span>contacto@tusitio.es · +34 629 827 400</span>
+      <span>sadyc.info@gmail.com · 686 14 83 74</span>
       <span>02 / 08</span>
     </footer>
   </section>
@@ -752,7 +769,7 @@
 
     <footer class="pg-foot">
       <span>Web y Automatización para empresas</span>
-      <span>contacto@tusitio.es · +34 629 827 400</span>
+      <span>sadyc.info@gmail.com · 686 14 83 74</span>
       <span>03 / 08</span>
     </footer>
   </section>
@@ -846,7 +863,7 @@
 
     <footer class="pg-foot">
       <span>Web y Automatización para empresas</span>
-      <span>contacto@tusitio.es · +34 629 827 400</span>
+      <span>sadyc.info@gmail.com · 686 14 83 74</span>
       <span>04 / 08</span>
     </footer>
   </section>
@@ -934,7 +951,7 @@
 
     <footer class="pg-foot">
       <span>Web y Automatización para empresas</span>
-      <span>contacto@tusitio.es · +34 629 827 400</span>
+      <span>sadyc.info@gmail.com · 686 14 83 74</span>
       <span>05 / 08</span>
     </footer>
   </section>
@@ -1000,7 +1017,7 @@
 
     <footer class="pg-foot">
       <span>Web y Automatización para empresas</span>
-      <span>contacto@tusitio.es · +34 629 827 400</span>
+      <span>sadyc.info@gmail.com · 686 14 83 74</span>
       <span>06 / 08</span>
     </footer>
   </section>
@@ -1062,7 +1079,7 @@
 
     <footer class="pg-foot">
       <span>Web y Automatización para empresas</span>
-      <span>contacto@tusitio.es · +34 629 827 400</span>
+      <span>sadyc.info@gmail.com · 686 14 83 74</span>
       <span>07 / 08</span>
     </footer>
   </section>
@@ -1125,21 +1142,22 @@
           <div class="ic">📞</div>
           <div>
             <div class="k">Teléfono</div>
-            <div class="v">+34 629 827 400</div>
+            <div class="v">686 14 83 74</div>
           </div>
         </div>
         <div class="row">
           <div class="ic">📧</div>
           <div>
             <div class="k">Email</div>
-            <div class="v">contacto@tusitio.es</div>
+            <div class="v">sadyc.info@gmail.com</div>
           </div>
         </div>
         <div class="row">
           <div class="ic">🕐</div>
           <div>
-            <div class="k">Horario de atención</div>
-            <div class="v" style="font-size:11pt;">L–V · 09:00–19:00 CET</div>
+            <div class="k">Disponibilidad</div>
+            <div class="v" style="font-size:11pt;">L–S · 8:00–21:00</div>
+            <div style="font-size:8.5pt; color:#a9bcd9; margin-top:1mm;">Respuesta en menos de 2 horas</div>
           </div>
         </div>
         <div class="sig">
@@ -1157,7 +1175,7 @@
 
     <footer class="pg-foot">
       <span>Web y Automatización para empresas</span>
-      <span>contacto@tusitio.es · +34 629 827 400</span>
+      <span>sadyc.info@gmail.com · 686 14 83 74</span>
       <span>08 / 08</span>
     </footer>
   </section>
